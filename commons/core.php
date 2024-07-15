@@ -6,7 +6,7 @@ class CoreApp {
     public function __construct() {
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'env.php')); // Khai báo biến môi trường
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'route.php')); // Hàm hỗ trợ
-        require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'model.php')); // Controller cơ bản
+        require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'model.php')); // Model cơ bản
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'controller.php')); // Controller cơ bản
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'view.php')); // View cơ bản
     }
