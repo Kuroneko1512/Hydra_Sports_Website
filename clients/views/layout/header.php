@@ -104,7 +104,9 @@
     <!-- Topbar End -->
 
 
-    <!-- Navbar Start -->
+    <?php $viewApp->requestComponents('navbar'); ?>
+
+    <!-- Navbar Start
     <div class="container-fluid bg-dark mb-30">
         <div class="row px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
@@ -171,4 +173,4 @@
                 </nav>
             </div>
         </div>
-    </div>
+    </div> -->
