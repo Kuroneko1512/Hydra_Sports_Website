@@ -3,5 +3,11 @@
 
 // kiểm tra act và điều hướng tới các controller phù hợp
 match ($route->getAct()) {
-    '/' => (new HomeController())->index()
+    '/' => (new HomeController())->index(),
+    'product_detail' => (new ProductController())->detail(),
+    'category_shop' => (new CategoryController())->shop(),
+    'contact' => (new ContactController())->contact(),
+    'shoppingcart_cart' => (new ShoppingCartController())->cart(),
+    'checkout' => (new CheckoutController())->checkout(),
+
 };
