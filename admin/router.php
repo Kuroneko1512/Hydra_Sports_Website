@@ -5,5 +5,5 @@
 match ($route->getAct()) {
     '/' => (new DashboardController())->dashboard(),
     'login' => (new SessionController())->login(),
-    'category/index' => (new CategoryController())->index(),
+    'category' => (new CategoryController())->index(),
 };
