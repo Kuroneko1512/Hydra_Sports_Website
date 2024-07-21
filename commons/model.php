@@ -51,6 +51,67 @@ class BaseModel {
         }
     }
 
+    public function softRemoveIdTable($ids) {
+        try {
+            global $coreApp;
+            
+            // Kiểm tra xem trường trang_thai có tồn tại không
+            $checkColumnSql = "SHOW COLUMNS FROM {$this->tableName} LIKE 'status'";
+            $stmt = $this->conn->prepare($checkColumnSql);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0) {
+                throw new Exception("Trường sttus không tồn tại trong bảng {$this->tableName}");
+            }
+
+            // Chuyển đổi $ids thành mảng nếu nó không phải là mảng
+            if (!is_array($ids)) {
+                $ids = [$ids];
+            }
+
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            /*
+                Đoạn code này thực hiện các bước sau:
+                array_fill(0, count($ids), '?') tạo ra một mảng mới với số phần tử bằng số lượng ID trong $ids, mỗi phần tử là dấu chấm hỏi '?'.
+
+                implode(',', ...) nối các phần tử của mảng này lại với nhau, sử dụng dấu phẩy làm ký tự phân cách.
+
+                Ví dụ, nếu $ids có 3 phần tử, $placeholders sẽ là "?,?,?".
+                Điều này cho phép tạo ra một câu lệnh SQL động, có thể xử lý một số lượng ID bất kỳ:
+            */
+            $sql = "UPDATE {$this->tableName} SET trang_thai = 0 WHERE id IN ($placeholders)";
+
+            $stmt = $this->conn->prepare($sql);
+        
+            return $stmt->execute($ids);
+        } catch(Exception $e) {
+            $coreApp->debug($e);
+            return false;
+        }
+    }
+
+    public function updateStatusIdTableAndRelated($mainId, $mainTable, $relatedTables, $newStatus) {
+        try {
+            global $coreApp;
+            $this->conn->beginTransaction();
+
+            $sql = "CALL update_status_with_related(?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                $mainTable,
+                $mainId,
+                json_encode($relatedTables),
+                $newStatus
+            ]);
+
+            $this->conn->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            $coreApp->debug($e);
+            return false;
+        }
+    }
+
     public function insertTable($data) {
         try {
             global $coreApp;
