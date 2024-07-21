@@ -2,6 +2,7 @@
 // Các thành phần mặc định của 1 model phải có. Tất cả các model đều phải kế thừa lớp này
 class BaseModel {
     public $tableName;
+    public $id;
     public $conn;
 
     public function __construct() {
@@ -12,7 +13,7 @@ class BaseModel {
     public function allTable() {
         try {
             global $coreApp;
-            $sql = "SELECT * FROM {$this->tableName} ORDER BY id DESC";
+            $sql = "SELECT * FROM {$this->tableName} ORDER BY {$this->id} DESC";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -24,7 +25,7 @@ class BaseModel {
     public function findIdTable($id) {
         try {
             global $coreApp;
-            $sql = "SELECT * FROM {$this->tableName} WHERE id = :id";
+            $sql = "SELECT * FROM {$this->tableName} WHERE id = :id"; //:id là tham số - param, id là tên cột
     
             $stmt = $this->conn->prepare($sql);
         
@@ -39,7 +40,7 @@ class BaseModel {
     public function removeIdTable($id) {
         try {
             global $coreApp;
-            $sql = "DELETE FROM {$this->tableName} WHERE (`id` = :id)";
+            $sql = "DELETE FROM {$this->tableName} WHERE (`{$this->id}` = :id)";
     
             $stmt = $this->conn->prepare($sql);
         
@@ -114,6 +115,7 @@ class BaseModel {
 
     public function insertTable($data) {
         try {
+            //var_dump($data);die;
             global $coreApp;
             $data = $this->convertToArray($data);
             // Lấy các tên cột từ mảng $data
@@ -136,6 +138,7 @@ class BaseModel {
 
             return $stmt->execute($parameters);
         } catch(Exception $e) {
+            // var_dump($e);die;
             $coreApp->debug($e);
         }
     }
@@ -152,7 +155,7 @@ class BaseModel {
             }, $columns));
             
             // Tạo câu lệnh SQL
-            $sql = "UPDATE $this->tableName SET $setString WHERE id = :id";
+            $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = :id";
             
             $stmt = $this->conn->prepare($sql);
             

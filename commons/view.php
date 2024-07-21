@@ -15,7 +15,7 @@ class BaseView {
         global $route;
         global $viewApp;
         $data['title'] = $this->title;
-        
+
         extract($data);
         $name = join(DIRECTORY_SEPARATOR, explode(".", $name));
         include(join(DIRECTORY_SEPARATOR, array('.', $route->isAdminPage ? 'admin' : 'clients','views', "layout", "header.php")));
