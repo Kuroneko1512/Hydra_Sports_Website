@@ -57,7 +57,9 @@
                             <span class="logo-text">
                                 <!-- dark Logo text -->
                                 <img src="lib/admin/assets/images/logo-text.png" alt="homepage" class="light-logo" />
-
+                                <form class="app-search position-absolute">
+                                    <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
+                                </form>
                             </span>
                             <!-- Logo icon -->
                             <!-- <b class="logo-icon"> -->
@@ -103,10 +105,9 @@
                             <!-- ============================================================== -->
                             <!-- Search -->
                             <!-- ============================================================== -->
-                            <li class="nav-item search-box"> <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
-                                <form class="app-search position-absolute">
-                                    <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
-                                </form>
+                            <li class="nav-item search-box"> 
+                                <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
+                                
                             </li>
                         </ul>
                         <!-- ============================================================== -->

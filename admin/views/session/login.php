@@ -45,7 +45,7 @@
                         <span class="db"><img src="lib/admin/assets/images/logo.png" alt="logo" /></span>
                     </div>
                     <!-- Form -->
-                    <form class="form-horizontal m-t-20" id="loginform" action="http://localhost/mvc-oop-basic-start_stu?mode=admin&act=login">
+                    <!-- <form class="form-horizontal m-t-20" id="loginform" action="http://localhost/mvc-oop-basic-start_stu?mode=admin&act=login"> -->
                         <div class="row p-b-30">
                             <div class="col-12">
                                 <div class="input-group mb-3">
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    <!-- </form> -->
                 </div>
                 <div id="recoverform">
                     <div class="text-center">
