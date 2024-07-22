@@ -24,13 +24,15 @@ match ($route->getAct()) {
     'list-order' => (new OrderController())->list(),
 
     'category_add' => (new CategoryController())->add(),
-    'category_delete' => (new CategoryController())->category_delete(),
+    // 'category_delete' => (new CategoryController())->category_delete(),
     'category_edit' => (new CategoryController())->edit(),
     
 
     
     'product' =>(new ProductController())->index(),
     'product_add' =>(new ProductController())->add(),
+    'product_edit' =>(new ProductController())->edit(),
+
 
 
 

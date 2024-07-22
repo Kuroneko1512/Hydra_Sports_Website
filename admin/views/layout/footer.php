@@ -116,7 +116,7 @@
                                                 <span class="checkmark"></span>
                                             </label>
                                         </th>
-                                        <th>Màu</th>
+                                        <th>Màu ccc</th>
                                         <th>Size</th>
                                         <th>Số lượng</th>
                                         <th>Giá</th>
@@ -187,7 +187,7 @@
 
                 // Gắn sự kiện click cho các tên sản phẩm
                 document.querySelectorAll('#TableProduct .product-name').forEach(productName => {
-                    productName.addEventListener('click', handleProductNameClick);
+                    productName.addEventListener('click', );
                     console.log('done 2');
                 });
                 const a = document.querySelectorAll('#TableProduct .product-name');

@@ -4,7 +4,7 @@ class CategoryController extends BaseController
 {
     public function loadModels() {}
 
-    public function shop() {
-        $this->viewApp->requestView('category.shop');
+    public function category() {
+        $this->viewApp->requestView('category.category');
     }
 }
