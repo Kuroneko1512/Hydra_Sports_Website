@@ -75,7 +75,8 @@ class BaseModel {
                 $parameters[":$key"] = $value;
             }
 
-            return $stmt->execute($parameters);
+            $stmt->execute($parameters);
+            return $this->conn->lastInsertId();// trả ra ID của data variant
         } catch(Exception $e) {
             // var_dump($e);die;
             $coreApp->debug($e);
@@ -84,17 +85,24 @@ class BaseModel {
 
     public function updateIdTable($data, $id) {
         try {
+            // var_dump($id);
+            // die();
             global $coreApp;
             $data = $this->convertToArray($data);
             // Lấy các tên cột từ mảng $data
             $columns = array_keys($data);
+           
+
             // Tạo chuỗi các cặp 'column = :column'
             $setString = implode(', ', array_map(function($col) {
                 return "$col = :$col";
             }, $columns));
+           
             
             // Tạo câu lệnh SQL
-            $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = :id";
+            $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = $id";
+            // var_dump($sql);
+            // die();
             
             $stmt = $this->conn->prepare($sql);
             
@@ -104,7 +112,8 @@ class BaseModel {
                 $parameters[":$key"] = $value;
             }
             // Thêm id vào mảng parameters
-            $parameters[':id'] = $id;
+           
+            
 
             return $stmt->execute($parameters);
         } catch(Exception $e) {

@@ -35,12 +35,12 @@ class CategoryController extends BaseController
         $this->viewApp->requestView('category.add', $data);//hiển thị template category view và đổ ra bên ngoài biến $data
     }
 
-    public function category_delete(){
-        $categoryModel = new Category();
-        $id=$_GET['id'];
-        $categoryModel->removeIdTable($id);
-        $this->route->redirectAdmin('category');
-    }
+    // public function category_delete(){
+    //     $categoryModel = new Category();
+    //     $id=$_GET['id'];
+    //     $categoryModel->removeIdTable($id);
+    //     $this->route->redirectAdmin('category');
+    // }
 
     public function edit(){
         $categoryModel = new Category();

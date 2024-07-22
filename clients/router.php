@@ -5,7 +5,7 @@
 match ($route->getAct()) {
     '/' => (new HomeController())->index(),
     'product_detail' => (new ProductController())->detail(),
-    'category_shop' => (new CategoryController())->shop(),
+    'category' => (new CategoryController())->category(),
     'contact' => (new ContactController())->contact(),
     'shoppingcart_cart' => (new ShoppingCartController())->cart(),
     'checkout' => (new CheckoutController())->checkout(),
