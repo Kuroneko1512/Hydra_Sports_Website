@@ -78,6 +78,7 @@ class ProductController extends BaseController
         $colorModel = new Color();
         $sizeModel = new Size();
         $id=$_GET['id'];
+        // $id = $this->route->getId();
         $data = [];
         
         $data['categories'] = $categoryModel->allTable();
@@ -114,8 +115,9 @@ class ProductController extends BaseController
                 $dataProduct['product_name'] = $product_name;
                 $dataProduct['category_id'] = $category_id;
                 $dataProduct['description'] = $description;
+                
                 $resultID = $productModel->updateIdTable($dataProduct,$id);//insertTable truyền vào phải là một array trong đó key là tên cột
-
+                
                 $variants = $_POST['variant']; 
                 //?
                 // print_r( $variants);

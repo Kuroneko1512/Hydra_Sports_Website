@@ -117,6 +117,7 @@ class BaseModel {
 
             $sql = "CALL update_status_with_related(?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
+            
             $stmt->execute([
                 $mainTable,
                 $mainId,
@@ -182,11 +183,11 @@ class BaseModel {
             
             // Tạo câu lệnh SQL
 
-            $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = $id";
+            // $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = $id";
             // var_dump($sql);
             // die();
            // $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = :id";
-            // $sql = "UPDATE `$this->tableName` SET $setString WHERE id = :id";
+            $sql = "UPDATE `$this->tableName` SET $setString WHERE id = :id";
 
             $stmt = $this->conn->prepare($sql);
             
@@ -196,7 +197,7 @@ class BaseModel {
                 $parameters[":$key"] = $value;
             }
             // Thêm id vào mảng parameters
-           
+            $parameters[':id'] = $id;
             
 
             return $stmt->execute($parameters);

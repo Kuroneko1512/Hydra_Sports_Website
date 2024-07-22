@@ -25,29 +25,42 @@ class HomeController extends BaseController
     }
 
     public function detailProduct(){
-        $product_id = $this->route->getId();
+        $product_id =(int) $this->route->getId();
+
+        // var_dump($product_id);
+        // die();
+        // $product_id = $_GET['id'];
         $color = $this->homeModel->allColor();
         $size = $this->homeModel->allSize();
         $variant = $this->homeModel->allVariant($product_id);
         $review = $this->homeModel->allReview($product_id);
-        $product_variant_id = $variant['id'];
-        $image = $this->homeModel->allImageVariant($product_variant_id);
-        $category = $this->homeModel->findIdCategory($product_id);
+        // if (is_array($variant)) {
+        //     $product_variant_id = $variant['id'];
+        // }
+        // $product_variant_id = $variant['id'];    
+        // $image = $this->homeModel->allImageVariant($product_variant_id);
+        // $category = $this->homeModel->findIdCategory($product_id);
+
         $dataArray = [
+            'product_id' => $product_id,
             'color' => $color,
             'size' => $size,
             'variant' => $variant,
             'review' => $review,
-            'image' => $image,
-            'category' => $category
+            // 'product_variant_id' => $product_variant_id,
+            // 'image' => $image,
+            // 'category' => $category
         ];
-
-        $this->viewApp->requestView('detail.detail', $dataArray);
+        echo "<pre>";
+        var_dump($dataArray);
+        die();
+        // $this->viewApp->requestView('product.detail', $dataArray);
+        
     }
 
     public function addToCart(){
         $product_id = $this->route->getId();
-        
+
     }
 
 }

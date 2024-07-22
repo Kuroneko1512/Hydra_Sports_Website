@@ -12,10 +12,12 @@
     public function allVariant($product_id){
         try{
             global $coreApp;
-            $sql = "SELECT * FROM `{$this->product_variant}` WHERE product_id = :product_id ORDER BY id DESC";
+            $sql = "SELECT * FROM `{$this->product_variant}` WHERE `product_id` = $product_id ";
+            // var_dump($sql);
+            // die();
 
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':product_id', $product_id);
+            // $stmt->bindParam(':product_id', $product_id);
             $stmt->execute();
             return $stmt->fetchAll();
         }catch(Exception $e){

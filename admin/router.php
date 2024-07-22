@@ -25,8 +25,8 @@ match ($route->getAct()) {
 
     'category_add' => (new CategoryController())->add(),
     // 'category_delete' => (new CategoryController())->category_delete(),
-    'category_edit' => (new CategoryController())->edit(),
-    
+    'category_edit' => (new CategoryController())->edit(),  
+    // 'ban-category' => (new CategoryController())->ban(),  
 
     
     'product' =>(new ProductController())->index(),

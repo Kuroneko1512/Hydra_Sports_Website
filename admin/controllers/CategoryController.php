@@ -2,7 +2,9 @@
 
 class CategoryController extends BaseController
 {
-    public function loadModels() {}
+    public function loadModels() {
+        // $categoryModel = new Category();
+    }
 
     public function index() {
         $categoryModel = new Category();//khởi tạo 1 object tên Category
@@ -68,4 +70,13 @@ class CategoryController extends BaseController
         $this->viewApp->requestView('category.edit', $data);//template category view
     }
     
+
+    public function ban(){
+        $categoryModel = new Category();
+
+        $id = $this->route->getId();
+        // $categoryModel->updateStatusIdTableAndRelated($id, 'category', ['product' => 'category_id'], 0);
+        $categoryModel->updateStatusIdTableAndRelated($id,'category',['product' => 'category_id'],0);
+        $this->route->redirectAdmin('category');
+    }
 }

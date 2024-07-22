@@ -76,7 +76,7 @@
                                         <a href="<?= $route->getLocateAdmin('category_edit') ?>&id=<?= $category['id'] ?>">
                                             <button type="button" class="btn btn-cyan btn-sm">Edit</button>
                                         </a>
-                                        <a href="<?= $route->getLocateAdmin('category_delete') ?>&id=<?= $category['id'];?>"  onclick="return confirm ('Bạn có muốn xóa không')">
+                                        <a href="<?= $route->getLocateAdmin('ban-category', ['id' => $category['id']]) ?>"  onclick="return confirm ('Bạn có muốn xóa không')">
                                             <button type="button" class="btn btn-warning btn-sm">Delete</button>
                                         </a>
                                     </td>
