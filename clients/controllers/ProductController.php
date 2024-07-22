@@ -7,4 +7,6 @@ class ProductController extends BaseController
     public function detail() {
         $this->viewApp->requestView('product.detail');
     }
+
+    
 }

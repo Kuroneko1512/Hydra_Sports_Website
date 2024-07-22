@@ -10,4 +10,7 @@ match ($route->getAct()) {
     'shoppingcart_cart' => (new ShoppingCartController())->cart(),
     'checkout' => (new CheckoutController())->checkout(),
 
+    'cart' => (new CartController())->cart(),
+    
+
 };
