@@ -38,7 +38,8 @@
         <div class="row">
             <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
 
-                <form action="" method="Post">
+                <!-- <form action="" method="Post"> -->
+                <form action="<?= $route->getLocateAdmin('post-edit-user', ['id' => $user['id']]) ?>" method="Post">
                     <div class="mb-3">
                         <label for="" class="form-label">Full name</label>
                         <input type="text" class="form-control" id="" name="full_name" placeholder="Full name" value="<?= $user['full_name'] ?>">
@@ -76,7 +77,8 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" name="btn-edit-user">Submit</button>
+                    <!-- <button type="submit" class="btn btn-primary" name="btn-edit-user">Submit</button> -->
+                    <button type="submit" class="btn btn-primary" >Submit</button>
                 </form>
 
             </div>

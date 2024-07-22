@@ -13,7 +13,8 @@ class BaseModel {
     public function allTable() {
         try {
             global $coreApp;
-            $sql = "SELECT * FROM {$this->tableName} ORDER BY {$this->id} DESC";
+            // $sql = "SELECT * FROM {$this->tableName} ORDER BY {$this->id} DESC";
+            $sql = "SELECT * FROM `{$this->tableName}` ORDER BY id DESC";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -22,10 +23,28 @@ class BaseModel {
         }
     }
 
+    public function getAllDataFromTables($tables) {
+        try {
+            global $coreApp;
+            $unionQueries = [];
+            foreach ($tables as $table) {
+                $unionQueries[] = "SELECT * FROM {$table}";
+            }
+
+            $sql = implode(' UNION ', $unionQueries);
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch(Exception $e) {
+            $coreApp->debug($e);
+            return false;
+        }
+    }
+
     public function findIdTable($id) {
         try {
             global $coreApp;
-            $sql = "SELECT * FROM {$this->tableName} WHERE id = :id"; //:id là tham số - param, id là tên cột
+            $sql = "SELECT * FROM `{$this->tableName}` WHERE id = :id"; //:id là tham số - param, id là tên cột
     
             $stmt = $this->conn->prepare($sql);
         
@@ -40,7 +59,8 @@ class BaseModel {
     public function removeIdTable($id) {
         try {
             global $coreApp;
-            $sql = "DELETE FROM {$this->tableName} WHERE (`{$this->id}` = :id)";
+            // $sql = "DELETE FROM {$this->tableName} WHERE (`{$this->id}` = :id)";
+            $sql = "DELETE FROM `{$this->tableName}` WHERE (`id` = :id)";
     
             $stmt = $this->conn->prepare($sql);
         
@@ -57,7 +77,7 @@ class BaseModel {
             global $coreApp;
             
             // Kiểm tra xem trường trang_thai có tồn tại không
-            $checkColumnSql = "SHOW COLUMNS FROM {$this->tableName} LIKE 'status'";
+            $checkColumnSql = "SHOW COLUMNS FROM `{$this->tableName}` LIKE 'status'";
             $stmt = $this->conn->prepare($checkColumnSql);
             $stmt->execute();
             if ($stmt->rowCount() == 0) {
@@ -126,7 +146,7 @@ class BaseModel {
             $placeholders = ':' . implode(', :', $columns);
             
             // Tạo câu lệnh SQL
-            $sql = "INSERT INTO $this->tableName ($columnsString) VALUES ($placeholders)";
+            $sql = "INSERT INTO `$this->tableName` ($columnsString) VALUES ($placeholders)";
             
             $stmt = $this->conn->prepare($sql);
             
@@ -155,7 +175,8 @@ class BaseModel {
             }, $columns));
             
             // Tạo câu lệnh SQL
-            $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = :id";
+            // $sql = "UPDATE $this->tableName SET $setString WHERE {$this->id} = :id";
+            $sql = "UPDATE `$this->tableName` SET $setString WHERE id = :id";
             
             $stmt = $this->conn->prepare($sql);
             

@@ -40,7 +40,8 @@
             <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
                 
                 
-                <form action="" method="POST" id="createUserForm">
+                <!-- <form action="" method="POST" id="createUserForm"> -->
+                <form action="<?= $route->getLocateAdmin('post-create-user') ?>" method="POST" id="createUserForm">
                     <div class="mb-3">
                         <label for="" class="form-label">Full name</label>
                         <input type="text" class="form-control"  name="full_name" placeholder="Full name">
@@ -78,7 +79,8 @@
                         </select>
                     </div> -->
 
-                    <button type="submit" class="btn btn-primary" name="btn-add-user">Submit</button>
+                    <!-- <button type="submit" class="btn btn-primary" name="btn-add-user">Submit</button> -->
+                    <button type="submit" class="btn btn-primary" >Submit</button>
                 </form>
 
             </div>
@@ -96,4 +98,4 @@
     </div>
     <!-- ============================================================== -->
     <!-- End Container fluid  -->
-     
+    

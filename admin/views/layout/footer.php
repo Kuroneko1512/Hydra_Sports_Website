@@ -19,8 +19,6 @@
         <!-- Bootstrap tether Core JavaScript -->
             <script src="lib/admin/assets/libs/popper.js/dist/umd/popper.min.js"></script>
             <script src="lib/admin/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-            <script src="lib/admin/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-            <script src="lib/admin/assets/extra-libs/sparkline/sparkline.js"></script>
         <!-- slimscrollbar scrollbar JavaScript -->
         <script src="lib/admin/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
         <script src="lib/admin/assets/extra-libs/sparkline/sparkline.js"></script>

@@ -57,7 +57,9 @@
                             <span class="logo-text">
                                 <!-- dark Logo text -->
                                 <img src="lib/admin/assets/images/logo-text.png" alt="homepage" class="light-logo" />
-
+                                <form class="app-search position-absolute">
+                                    <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
+                                </form>
                             </span>
                             <!-- Logo icon -->
                             <!-- <b class="logo-icon"> -->
