@@ -1,9 +1,11 @@
 <?php
 
-class CoreApp {
+class CoreApp
+{
     public $connDbGlobal;
 
-    public function __construct() {
+    public function __construct()
+    {
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'env.php')); // Khai báo biến môi trường
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'route.php')); // Hàm hỗ trợ
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'model.php')); // Model cơ bản
@@ -11,7 +13,8 @@ class CoreApp {
         require_once join(DIRECTORY_SEPARATOR, array('.', 'commons', 'view.php')); // View cơ bản
     }
 
-    public function initApp($prefix) {
+    public function initApp($prefix)
+    {
         global $route;
         $this->loadControllers($prefix);
         $this->loadModels($prefix);
@@ -19,7 +22,8 @@ class CoreApp {
         require_once join(DIRECTORY_SEPARATOR, array('.', $prefix, 'router.php'));
     }
 
-    public function loadAllFileWithStruct($directory, $struct) {
+    public function loadAllFileWithStruct($directory, $struct)
+    {
         $files = glob($directory . $struct);
         // Duyệt qua từng tệp và thực hiện require_once
         foreach ($files as $file) {
@@ -27,19 +31,23 @@ class CoreApp {
         }
     }
 
-    public function loadControllers($directory) {
+    public function loadControllers($directory)
+    {
         $directory = join(DIRECTORY_SEPARATOR, array('.', $directory, 'controllers'));
-        $this->loadAllFileWithStruct($directory,  '/*Controller.php');
+        $this->loadAllFileWithStruct($directory, '/*Controller.php');
     }
 
-    public function loadModels($directory) {
+    public function loadModels($directory)
+    {
         $directory = join(DIRECTORY_SEPARATOR, array('.', $directory, 'models'));
-        $this->loadAllFileWithStruct($directory,  '/*.php');
+        $this->loadAllFileWithStruct($directory, '/*.php');
     }
 
     // Kết nối CSDL qua PDO
-    public function connectDB() {
-        if ($this->connDbGlobal !== null) return $this->connDbGlobal;
+    public function connectDB()
+    {
+        if ($this->connDbGlobal !== null)
+            return $this->connDbGlobal;
         // Kết nối CSDL
         $host = DB_HOST;
         $port = DB_PORT;
@@ -53,17 +61,36 @@ class CoreApp {
 
             // cài đặt chế độ trả dữ liệu
             $this->connDbGlobal->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-        
+
             return $this->connDbGlobal;
         } catch (PDOException $e) {
             $this->debug("Connection failed: " . $e->getMessage());
         }
     }
 
-    public function debug($data)
+    // public function debug($data)
+    // {
+    //     echo "<pre>";
+    //     print_r($data);
+    //     die();
+    // }
+    public function debug($data, $title = null)
     {
         echo "<pre>";
-        print_r($data);
+        if ($title) {
+            echo "<strong>$title</strong>\n";
+        }
+        if ($data instanceof Exception) {
+            echo "Exception: " . get_class($data) . "\n";
+            echo "Message: " . $data->getMessage() . "\n";
+            echo "File: " . $data->getFile() . "\n";
+            echo "Line: " . $data->getLine() . "\n";
+            echo "Trace:\n" . $data->getTraceAsString() . "\n";
+        } else {
+            print_r($data);
+        }
+        echo "</pre>";
         die();
     }
+
 }

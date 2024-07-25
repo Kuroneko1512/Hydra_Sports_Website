@@ -3,5 +3,5 @@
 class Category extends BaseModel
 {
     public $tableName = 'category';
-    public $id = 'id';
+    // public $id = 'id';
 }

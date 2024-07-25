@@ -2,81 +2,84 @@
 
 class CategoryController extends BaseController
 {
+    public  $categoryModel;
     public function loadModels() {
-        // $categoryModel = new Category();
+        $this->categoryModel = new Category();
     }
-
-    public function index() {
-        $categoryModel = new Category();//khởi tạo 1 object tên Category
-        $categories = $categoryModel->allTable();
-        //var_dump($categories);die;
-        $data['categories'] = $categories;
-        
-        $this->viewApp->requestView('category.index', $data);
+    public function list() {
+        $categories = $this->categoryModel->allTable();
+        $this->viewApp->requestView('category.list', ['categories' => $categories]);
     }
-
-    public function add() {
-        $categoryModel = new Category();
-        $data = [];
-        if(isset($_POST['btn-add'])) {
-            $category_name = $_POST['category_name'];
-            $status=$_POST['status'];
-            $error=[];
-            if(empty($_POST['category_name'])){
-                $error['category_name'] = "Bạn cần nhập tên danh mục";
-                $data['error'] = $error;
-            }
-
-            if(empty($error)){
-                $data['category_name'] = $category_name;
-                $data['status'] = $status;
-                $categoryModel->insertTable($data);//insertTable truyền vào phải là một array trong đó key là tên cột
-                $this->route->redirectAdmin('category');// this gọi đến chính bản thân class đó: CategoryController được kế thừa từ BaseController
-            }
+    private function validateCategoryData($data){
+        $errors = [];
+        if (empty($data['category_name'])) {
+            $errors['category_name'] = "Bạn cần nhập tên danh mục";
         }
-        $this->viewApp->requestView('category.add', $data);//hiển thị template category view và đổ ra bên ngoài biến $data
+        return $errors;
     }
-
-    // public function category_delete(){
-    //     $categoryModel = new Category();
-    //     $id=$_GET['id'];
-    //     $categoryModel->removeIdTable($id);
-    //     $this->route->redirectAdmin('category');
-    // }
-
-    public function edit(){
-        $categoryModel = new Category();
-        $id=$_GET['id'];
-        $data = [];
-        $categoryById=$categoryModel->findIdTable($id);
-        
-        if(isset($_POST['btn-edit'])){
-            $category_name = $_POST['category_name'];
-            $status = $_POST['status'];
-            $error=[];
-            if(empty($_POST['category_name'])){
-                $error['category_name'] = "Bạn cần nhập tên danh mục";
-                $data['error'] = $error;
-            }
-            if(empty($error)){
-                $dataUpdate['category_name'] = $category_name;
-                $dataUpdate['status'] = $status;
-                // var_dump($id);die;
-                $categoryModel->updateIdTable($dataUpdate,$id);
-                $this->route->redirectAdmin('category');
-            }
+    private function create(){
+        $this->viewApp->requestView('category.create');
+    }
+    private function postCreate(){
+        $categoryCreateForm = $this->route->form;
+        $errors = $this->validateCategoryData($categoryCreateForm);
+        if (empty($errors)) {
+            $this->categoryModel->insertTable($categoryCreateForm);
+            $this->route->redirectAdmin('category');
+        } else {
+            $data = 
+            [
+                'errors' => $errors,
+                'categoryCreateForm' => $categoryCreateForm
+            ];
+            $this->viewApp->requestView('category.create', $data );
         }
-        $data['categoryById'] = $categoryById;
-        $this->viewApp->requestView('category.edit', $data);//template category view
     }
-    
-
-    public function ban(){
-        $categoryModel = new Category();
-
+    private function edit(){
         $id = $this->route->getId();
-        // $categoryModel->updateStatusIdTableAndRelated($id, 'category', ['product' => 'category_id'], 0);
-        $categoryModel->updateStatusIdTableAndRelated($id,'category',['product' => 'category_id'],0);
-        $this->route->redirectAdmin('category');
+        $categoryUpdate = $this->categoryModel->findIdTable($id);
+        $this->viewApp->requestView('category.edit',['category' => $categoryUpdate]);
+    }
+    private function postEdit(){
+        $id = $this->route->getId();
+        $categoryEditForm = $this->route->form;   
+        $errors = $this->validateCategoryData($categoryEditForm);
+        if (empty($errors)){         
+            $this->categoryModel->updateIdTable($categoryEditForm,$id);
+            $this->route->redirectAdmin('category');
+        } else {
+            $categoryUpdate = $this->categoryModel->findIdTable($id);
+            $data =
+            [   
+                'category' => $categoryUpdate,
+                'errors' => $errors,
+                'categoryEditForm' => $categoryEditForm
+            ];
+            $this->viewApp->requestView('category.edit', $data );
+        }
+    }  
+    public function inactive(){
+        $id = $this->route->getId();
+        $relateTables = 
+        [
+            ['table' => 'product', 'key' => 'category_id']
+        ];
+        // [
+        //     ['table' => 'product', 'key' => 'category_id'],
+        //     ['table' => 'subcategory', 'key' => 'parent_category_id'],
+        //     ['table' => 'category_attribute', 'key' => 'category_id']
+        // ]
+        
+        $this->categoryModel->updateStatusIdTableAndRelated($id,'category',$relateTables,0);
+        $this->route->redirectAdmin('list-category');
+    }
+    public function active(){
+        $id = $this->route->getId();
+        $relateTables = 
+        [
+            ['table' => 'product', 'key' => 'category_id']
+        ];
+        $this->categoryModel->updateStatusIdTableAndRelated($id,'category',$relateTables,1);
+        $this->route->redirectAdmin('list-category');
     }
 }

@@ -39,46 +39,54 @@
             <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
 
                 <!-- <form action="" method="Post"> -->
-                <form action="<?= $route->getLocateAdmin('post-edit-user', ['id' => $user['id']]) ?>" method="Post">
+                <form action="<?= $route->getLocateAdmin('post-edit-user', ['id' => $user['id']]) ?>" method="Post" id="editUserForm">
+                    <input type="hidden" name="id" value="<?= $user['id'] ?>">
+
                     <div class="mb-3">
                         <label for="" class="form-label">Full name</label>
-                        <input type="text" class="form-control" id="" name="full_name" placeholder="Full name" value="<?= $user['full_name'] ?>">
+                        <input type="text" class="form-control"  name="full_name" placeholder="Full name" value="<?= $user['full_name'] ?>">
+                        <span id="full_name-error" class="error-message text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="" name="username" placeholder="Username"  value="<?= $user['username'] ?>">
+                        <input type="text" class="form-control"  name="username" placeholder="Username"  value="<?= $user['username'] ?>">
+                        <span id="username-error" class="error-message text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">PassWord</label>
-                        <input type="password" class="form-control" id="" name="password" placeholder="Password" value="<?= $user['password'] ?>">
+                        <input type="password" class="form-control"  name="password" placeholder="Password" value="<?= $user['password'] ?>">
+                        <span id="password-error" class="error-message text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="" name="email" placeholder="Email" value="<?= $user['email'] ?>">
+                        <input type="email" class="form-control"  name="email" placeholder="Email" value="<?= $user['email'] ?>">
+                        <span id="email-error" class="error-message text-danger"></span>
                     </div>
                     
                     <div class="mb-3">
                         <label for="" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="" name="address" placeholder="Address" value="<?= $user['address'] ?>">
+                        <input type="text" class="form-control"  name="address" placeholder="Address" value="<?= $user['address'] ?>">
+                        <span id="address-error" class="error-message text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="" name="phone" placeholder="Phone" value="<?= $user['phone'] ?>">
+                        <input type="text" class="form-control"  name="phone" placeholder="Phone" value="<?= $user['phone'] ?>">
+                        <span id="phone-error" class="error-message text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">role</label>
-                        <select name="role" id="">
+                        <select name="role" >
                             <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>User</option>
                         </select>
                     </div>
 
                     <!-- <button type="submit" class="btn btn-primary" name="btn-edit-user">Submit</button> -->
-                    <button type="submit" class="btn btn-primary" >Submit</button>
+                    <button type="submit" class="btn btn-primary" >Edit</button>
                 </form>
 
             </div>

@@ -5,8 +5,6 @@
 match ($route->getAct()) {
     '/' => (new DashboardController())->dashboard(),
     'login' => (new SessionController())->login(),
-    'category' => (new CategoryController())->index(),
-
 
     // User Table
     'list-user' => (new UserController())->list(),
@@ -16,6 +14,13 @@ match ($route->getAct()) {
     'post-edit-user' => (new UserController())->postEdit(),
     'create-user' => (new UserController())->create(),
     'post-create-user' => (new UserController())->postCreate(),
+    'validate-user-data' => (new UserController())->validateUserData(),
+    'validate-edit-user-data' => (new UserController())->validateEditUserData(),
+
+    // Category
+    'list-category' => (new CategoryController())->list(),
+    'active-category' => (new CategoryController())->active(),
+    'inactive-category' => (new CategoryController())->inactive(),
 
     // Review
     'list-review' => (new ReviewController())->list(),
@@ -23,10 +28,7 @@ match ($route->getAct()) {
     // Order
     'list-order' => (new OrderController())->list(),
 
-    'category_add' => (new CategoryController())->add(),
-    // 'category_delete' => (new CategoryController())->category_delete(),
-    'category_edit' => (new CategoryController())->edit(),  
-    'ban-category' => (new CategoryController())->ban(),  
+    
 
     
     'product' =>(new ProductController())->index(),
