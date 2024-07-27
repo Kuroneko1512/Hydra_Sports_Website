@@ -44,38 +44,62 @@
                 <form action="<?= $route->getLocateAdmin('post-create-user') ?>" method="POST" id="createUserForm">
                     <div class="mb-3">
                         <label for="" class="form-label">Full name</label>
-                        <input  type="text" class="form-control"  name="full_name" placeholder="Full name">                        
-                        <span id="full_name-error" class="error-message text-danger"></span>
+                        <input  type="text" class="form-control"  name="full_name" placeholder="Full name">
+                        <span id="full_name-error" class="error-message text-danger">
+                            <?php if (isset($errors['full_name'])) :?>
+                                <?= $errors['full_name'] ?>
+                            <?php endif; ?>
+                        </span>                        
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">Username</label>
                         <input  type="text" class="form-control"  name="username" placeholder="Username">
-                        <span id="username-error" class="error-message text-danger"></span>
+                        <span id="username-error" class="error-message text-danger">
+                            <?php if (isset($errors['username'])) : ?>    
+                                <?= $errors['username'] ?>
+                            <?php endif; ?>
+                        </span>                       
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">PassWord</label>
-                        <input  type="password" class="form-control"  name="password" placeholder="Password">
-                        <span id="password-error" class="error-message text-danger"></span>
+                        <input  type="password" class="form-control"  name="password" placeholder="Password">                        
+                        <span id="password-error" class="error-message text-danger">
+                            <?php if (isset($errors['password'])) : ?>
+                                <?= $errors['password'] ?>
+                            <?php endif; ?>
+                        </span>
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">Email</label>
                         <input  type="email" class="form-control"  name="email" placeholder="Email">
-                        <span id="email-error" class="error-message text-danger"></span>
+                        <span id="email-error" class="error-message text-danger">
+                            <?php if (isset($errors['email'])) : ?>
+                                <?= $errors['email'] ?>
+                            <?php endif; ?>
+                        </span>
                     </div>
                     
                     <div class="mb-3">
                         <label for="" class="form-label">Address</label>
                         <input  type="text" class="form-control"  name="address" placeholder="Address">
-                        <span id="address-error" class="error-message text-danger"></span>
+                        <span id="address-error" class="error-message text-danger">
+                            <?php if (isset($errors['address'])) :?>
+                                <?= $errors['address'] ?>
+                            <?php endif; ?>
+                        </span>
                     </div>
 
                     <div class="mb-3">
                         <label for="" class="form-label">Phone</label>
                         <input  type="text" class="form-control"  name="phone" placeholder="Phone">
-                        <span id="phone-error" class="error-message text-danger"></span>
+                        <span id="phone-error" class="error-message text-danger">
+                            <?php if (isset($errors['phone'])) : ?>
+                                <?= $errors['phone'] ?>
+                            <?php endif; ?>
+                        </span>
                     </div>
 
                     <!-- <div class="mb-3">

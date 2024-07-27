@@ -21,6 +21,12 @@ match ($route->getAct()) {
     'list-category' => (new CategoryController())->list(),
     'active-category' => (new CategoryController())->active(),
     'inactive-category' => (new CategoryController())->inactive(),
+    'create-category' => (new CategoryController())->create(),
+    'post-create-category' => (new CategoryController())->postCreate(),
+    'edit-category' => (new CategoryController())->edit(),
+    'post-edit-category' => (new CategoryController())->postEdit(),
+    'validate-category-data' => (new CategoryController())->validateCategoryData(),
+    'validate-edit-category-data' => (new CategoryController())->validateEditCategoryData(),
 
     // Review
     'list-review' => (new ReviewController())->list(),

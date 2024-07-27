@@ -1,34 +1,91 @@
-<form class="form-horizontal" method="post">
-<div class="container-fluid">
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Add Category</h4>
-                    <div class="form-group row">
-                        <label for="fname" class="col-sm-3 text-right control-label col-form-label">Category Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="fname" placeholder="First Name Here" name="category_name" value="<?php echo $categoryById['category_name'] ?>" >
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 text-right control-label col-form-label">Status</label>
-                        <div class="col-sm-9">
-                            <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="status">
-                                    <option value="1" <?php echo $categoryById['status'] == 1 ? "selected" : "" ?>>Active  </option>
-                                    <option value="0" <?php echo $categoryById['status'] == 0 ? "selected" : "" ?> >Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                    
-                <div class="border-top">
-                    <div class="card-body">
-                        <button type="submit" class="btn btn-primary" name="btn-edit" value="edit">Submit</button>
-                    </div>
-                </div>
+        <div class="col-12 d-flex no-block align-items-center">
+            <h3 class="page-title">Category</h3>
+            <div class="ml-2 mt-2 p-1 text-left">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="<? $route->getLocateAdmin() ?>">Dashboard</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Category</li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="ml-auto text-right">
+                <a href="<?= $route->getLocateAdmin('list-category') ?>" class="btn btn-success" >
+                    <!-- <i class="bi bi-arrow-90deg-left"></i> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708z"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
 </div>
-</form>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
+
+            <!-- <form action="" method="Post"> -->
+            <form action="<?= $route->getLocateAdmin('post-edit-category', ['id' => $category['id']]) ?>" method="Post" id="editCategoryForm">
+                <input type="hidden" name="id" value="<?= $category['id'] ?>">
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Category Name</label>
+                    <input type="text" class="form-control"  name="category_name" placeholder="Category name" value="<?= $category['category_name'] ?>">
+                    <span id="category_name-error" class="error-message text-danger">
+                        <?php if (isset($errors['category_name'])) :?>
+                            <?= $errors['category_name'] ?>
+                        <?php endif; ?>
+                    </span> 
+                </div>
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Description</label>
+                    <input type="text" class="form-control"  name="description" placeholder="Description" value="<?= $category['description'] ?>">
+                    <span id="description-error" class="error-message text-danger">
+                        <?php if (isset($errors['description'])) :?>
+                            <?= $errors['description'] ?>
+                        <?php endif; ?>
+                    </span>    
+                </div>
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Status</label>
+                    <select name="status" >
+                        <option value="0" <?= $category['status'] == 0 ? 'selected' : '' ?>>Inactive</option>
+                        <option value="1" <?= $category['status'] == 1 ? 'selected' : '' ?>>Active</option>
+                    </select>
+                </div>
+
+                <!-- <button type="submit" class="btn btn-primary" name="btn-edit-user">Submit</button> -->
+                <button type="submit" class="btn btn-primary" >Edit</button>
+            </form>
+
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->

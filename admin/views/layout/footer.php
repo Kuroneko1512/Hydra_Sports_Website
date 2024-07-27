@@ -54,10 +54,13 @@
             $('#zero_config3').DataTable();            
             
             var validateUserDataUrl = '<?= $route->getLocateAdmin("validate-user-data") ?>';
-var validateEditUserDataUrl = '<?= $route->getLocateAdmin("validate-edit-user-data") ?>';
+            var validateEditUserDataUrl = '<?= $route->getLocateAdmin("validate-edit-user-data") ?>';
+            var validateCategoryUrl = '<?= $route->getLocateAdmin("validate-category-data") ?>';
+            var validateEditCategoryUrl = '<?= $route->getLocateAdmin("validate-edit-category-data") ?>';
         </script>
+        <script src="lib/admin/dist/js/debounce-validate-form.js"></script>
         <script src="lib/admin/dist/js/product-show-variant.js"></script>
-        <script src="lib/admin/dist/js/validate-form-user.js"></script>
+        <!-- <script src="lib/admin/dist/js/validate-form-user.js"></script> -->
         <script src="lib/admin/dist/js/multi-choice-box.js"></script>
     </body>
 

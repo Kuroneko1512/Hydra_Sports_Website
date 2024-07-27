@@ -10,53 +10,94 @@ class CategoryController extends BaseController
         $categories = $this->categoryModel->allTable();
         $this->viewApp->requestView('category.list', ['categories' => $categories]);
     }
-    private function validateCategoryData($data){
-        $errors = [];
-        if (empty($data['category_name'])) {
-            $errors['category_name'] = "Bạn cần nhập tên danh mục";
+    // Xác thực dữ liệu cho form tạo mới category
+    public function validateCategoryData() {
+        $this->handleValidation(false);
+    }
+
+    // Xác thực dữ liệu cho form chỉnh sửa category
+    public function validateEditCategoryData() {
+        $this->handleValidation(true);
+    }
+
+    // Xử lý chung cho việc xác thực dữ liệu
+    private function handleValidation($isEdit) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = json_decode(file_get_contents('php://input'));
+            $errors = $this->validateCategoryDataInternal($data, $isEdit);
+            header('Content-Type: application/json');
+            echo json_encode($errors);
+            exit;
         }
+    }
+
+    // Logic xác thực chi tiết
+    private function validateCategoryDataInternal($data, $isEdit = false) {
+        $errors = [];
+        $requiredFields = ['category_name','description'];
+
+        // Kiểm tra các trường bắt buộc
+        foreach ($requiredFields as $field) {
+            if (empty($data->$field)) {
+                $errors[$field] = ucfirst($field) . " không được để trống!!";
+            }
+        }
+
+        // Lấy dữ liệu hiện có từ database
+        $categoryTable = $this->categoryModel->getCategoryName();
+
+        // Kiểm tra tính duy nhất của category_name
+        if (!$isEdit) {
+            $this->checkUniqueness($data, $errors, $categoryTable);
+        } else {
+            $this->checkUniquenessForEdit($data, $errors, $categoryTable);
+        }
+
         return $errors;
     }
-    private function create(){
-        $this->viewApp->requestView('category.create');
-    }
-    private function postCreate(){
-        $categoryCreateForm = $this->route->form;
-        $errors = $this->validateCategoryData($categoryCreateForm);
-        if (empty($errors)) {
-            $this->categoryModel->insertTable($categoryCreateForm);
-            $this->route->redirectAdmin('category');
-        } else {
-            $data = 
-            [
-                'errors' => $errors,
-                'categoryCreateForm' => $categoryCreateForm
-            ];
-            $this->viewApp->requestView('category.create', $data );
+
+    // Kiểm tra tính duy nhất cho form tạo mới
+    private function checkUniqueness($data, &$errors, $categoryTable) {
+        if (in_array($data->category_name, $categoryTable)) {
+            $errors['category_name'] = "Tên danh mục đã được sử dụng";
         }
     }
-    private function edit(){
+
+    // Kiểm tra tính duy nhất cho form chỉnh sửa
+    private function checkUniquenessForEdit($data, &$errors, $categoryTable) {
+        $currentCategoryName = $this->categoryModel->getCategoryNameById($data->id);
+        if ($data->category_name !== $currentCategoryName && in_array($data->category_name, $categoryTable)) {
+            $errors['category_name'] = "Tên danh mục đã được sử dụng";
+        }
+    }
+    public function create(){
+        $this->viewApp->requestView('category.create');
+    }
+    public function postCreate(){
+        $categoryCreateForm = $this->route->form;
+        $errors = $this->validateCategoryDataInternal((object)$categoryCreateForm, false);
+        if (!empty($errors)) {
+            $this->viewApp->requestView('category.create', ['errors' => $errors, 'category' => $categoryCreateForm]);
+            return;
+        } 
+        $this->categoryModel->insertTable($categoryCreateForm);
+        $this->route->redirectAdmin('list-category');
+    }
+    public function edit(){
         $id = $this->route->getId();
         $categoryUpdate = $this->categoryModel->findIdTable($id);
         $this->viewApp->requestView('category.edit',['category' => $categoryUpdate]);
     }
-    private function postEdit(){
+    public function postEdit(){
         $id = $this->route->getId();
         $categoryEditForm = $this->route->form;   
-        $errors = $this->validateCategoryData($categoryEditForm);
-        if (empty($errors)){         
-            $this->categoryModel->updateIdTable($categoryEditForm,$id);
-            $this->route->redirectAdmin('category');
-        } else {
-            $categoryUpdate = $this->categoryModel->findIdTable($id);
-            $data =
-            [   
-                'category' => $categoryUpdate,
-                'errors' => $errors,
-                'categoryEditForm' => $categoryEditForm
-            ];
-            $this->viewApp->requestView('category.edit', $data );
-        }
+        $errors = $this->validateCategoryDataInternal((object)$categoryEditForm, true);
+        if (!empty($errors)) {
+            $this->viewApp->requestView('category.edit', ['errors' => $errors, 'category' => $categoryEditForm]);
+            return;
+        } 
+        $this->categoryModel->updateIdTable($categoryEditForm,$id);
+        $this->route->redirectAdmin('list-category');
     }  
     public function inactive(){
         $id = $this->route->getId();
