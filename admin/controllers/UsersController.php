@@ -59,15 +59,6 @@
 
         public function create(){
             
-            // if(isset($_POST['btn-add-user'])) {
-            //     $userCreateForm = $this->route->form;
-            //     if (is_object($userCreateForm)) {
-            //         $userCreateForm = (array) $userCreateForm;
-            //     }
-            //     unset($userCreateForm['btn-add-user']);
-            //     $this->userModel->insertTable($userCreateForm);
-            //     $this->route->redirectAdmin('list-user');
-            // }
             $this->viewApp->requestView('Users.create');
         }
         

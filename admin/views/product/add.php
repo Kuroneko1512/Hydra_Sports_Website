@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post">
+<form class="form-horizontal" method="post" enctype="multipart/form-data"  >
 <div class="card">
     <div class="card-body">
                 <h4 class="card-title">Product Add</h4>
@@ -35,6 +35,7 @@
                         <th>Size</th>
                         <th>Stock</th>
                         <th>Price</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -65,6 +66,9 @@
                             </td>
                             <td>
                                 <input type="text" name="variant[0][price]" value="">
+                            </td>
+                            <td>
+                                <input type="file" name="image0">
                             </td>
                             <td>
                                 <a href="">
@@ -99,6 +103,9 @@
                             </td>
                             <td>
                                 <input type="text" name="variant[1][price]" value="">
+                            </td>
+                            <td>
+                                <input type="file" name="image1">
                             </td>
                             <td>
                                 <a href="">

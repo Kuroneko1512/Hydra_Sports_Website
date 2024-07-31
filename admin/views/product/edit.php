@@ -2,7 +2,7 @@
 // var_dump($data['productVariantById']);
 
 ?>
-<form class="form-horizontal" method="post">
+<form class="form-horizontal" method="post" enctype="multipart/form-data" >
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Product Edit</h4>
@@ -39,6 +39,7 @@
                                 <th>Size</th>
                                 <th>Stock</th>
                                 <th>Price</th>
+                                <th>Image</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -76,6 +77,10 @@
                                         <input type="text" name="variant[<?=$key ?>][price]" value="<?= $productVariant['price'] ?>">
                                     </td>
                                     <td>
+                                    <img src="<?=BASE_URL?>/uploads/products/<?=$productVariant['image']?>" height="100" width="100"/> 
+                                    <input type="file" name="image<?= $key ?>">
+                                    </td>
+                                    <td>
                                         <a href="">
                                             <button type="button" class="btn btn-cyan btn-sm">Add</button>
                                         </a>
@@ -85,42 +90,6 @@
                                 </tr>
                             <?php }
                             ?>
-
-
-                            <!-- <tr>
-                            <td></td>
-                            <td>
-                                <select name="variant[0][color]" id="">
-                                    <option value="">--Chọn--</option>
-                                    <?php
-                                    foreach ($data['colors'] as $color) { ?>
-                                        <option  value="" <?= $data['productVariantById'][0]['color_id'] == $color['id'] ? "" : "selected" ?>><?= $color['color_name'] ?></option>
-                                    <?php } ?>
-                                </select>
-                            </td>
-                            <td>
-                                <select name="variant[0][size]" id="">
-                                <option value="">--Chọn--</option>
-                                    <?php
-                                    foreach ($data['sizes'] as $size) { ?>
-                                        <option  value="" <?= $data['productVariantById'][0]['size_id'] == $size['id'] ? "" : "selected" ?>><?= $size['size_name'] ?></option>
-                                    <?php } ?>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" name="variant[0][stock]" value="<?= $data['productVariantById'][0]['stock'] ?>">
-                            </td>
-                            <td>
-                                <input type="text" name="variant[0][price]" value="<?= $data['productVariantById'][0]['price'] ?>">
-                            </td>
-                            <td>
-                                <a href="">
-                                    <button type="button" class="btn btn-cyan btn-sm">Add</button>
-                                </a>
-                                <a href="">
-                                </a>
-                            </td>
-                        </tr> -->
 
                         </tbody>
                     </table>

@@ -17,8 +17,11 @@ match ($route->getAct()) {
     'create-user' => (new UserController())->create(),
     'post-create-user' => (new UserController())->postCreate(),
 
+    
     // Review
-    'list-review' => (new ReviewController())->list(),
+    'review_list' => (new ReviewController())->index(),
+    'review_add' => (new ReviewController())->add(),
+    // 'review_edit' => (new ReviewController())->edit(),
 
     // Order
     'list-order' => (new OrderController())->list(),

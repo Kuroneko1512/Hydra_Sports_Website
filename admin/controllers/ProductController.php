@@ -28,6 +28,7 @@ class ProductController extends BaseController
 
         $productModel= new Product();
         $productVariantModel= new ProductVariant();
+        $productImageModel= new ProductImage();
 
         if(isset($_POST['btn_add'])) {
             //var_dump($_POST);die;
@@ -45,28 +46,46 @@ class ProductController extends BaseController
             }
 
             if(empty($error)){
-                $dataProduct = [];  // khởi tạo 1 array trống mới
+                $dataProduct = [];  
                 $dataProduct['product_name'] = $product_name;
                 $dataProduct['category_id'] = $category_id;
                 $dataProduct['description'] = $description;
-                $resultID = $productModel->insertTable($dataProduct);//insertTable truyền vào phải là một array trong đó key là tên cột
+                $resultID = $productModel->insertTable($dataProduct);
 
-                $variants = $_POST['variant']; //?
-                foreach ($variants as $variant) {
+                $variants = $_POST['variant']; 
+                //  pp($_POST);
+                foreach ($variants as $key=>$variant) {
                     if (empty($variant['color']) || empty($variant['size']) || empty($variant['stock']) || empty($variant['price'])) {
                         continue;
                     }
 
-                    $dataVariant = [];  // khởi tạo 1 array trống mới
+                    $dataVariant = [];  
                     $dataVariant['product_id'] = $resultID;
                     $dataVariant['color_id'] = $variant['color'];
                     $dataVariant['size_id'] = $variant['size'];
                     $dataVariant['stock'] = $variant['stock'];
                     $dataVariant['price'] = $variant['price'];
-                    $productVariantModel->insertTable($dataVariant);
+
+                    $variantID= $productVariantModel->insertTable($dataVariant);
+
+                    $image=$_FILES['image' . $key]['tmp_name'];
+                    $name_file=$_FILES['image' . $key]['name'];
+                    $vi_tri= ROOT_FOLDER . "/uploads/products/". uniqid() . $name_file;
+                    if(move_uploaded_file($image, $vi_tri)){
+                        echo "Upload thành công";
+                    }else{
+                        echo "Upload không thành công";
+                    }
+                    $dataImage=[];
+                    $dataImage['product_variant_id'] = $variantID;
+                    $dataImage['image_url'] = $name_file;
+                    $dataImage['is_primary']= 1;
+                    // pp($dataImage);
+
+                    $productImageModel->insertTable($dataImage);
                 }
 
-                $this->route->redirectAdmin('product');// this gọi đến chính bản thân class đó: CategoryController được kế thừa từ BaseController
+                $this->route->redirectAdmin('product');
             }
         }
 
@@ -93,7 +112,16 @@ class ProductController extends BaseController
         $productVariantById=$productVariantModel->all_VR_Table($id);
         // var_dump($productVariantById);
         // // die();
+        $productImageModel = new ProductImage();
+        $productImage = $productImageModel->all_Image_Table($id);
 
+        foreach($productVariantById as $key => $value){
+            foreach($productImage as $valueI){
+                if($valueI['product_variant_id'] == $value['id']){
+                    $productVariantById[$key]['image'] = $valueI['image_url'];
+                }
+            }
+        }
 
         if(isset($_POST['btn_edit'])) {
             // var_dump($_POST);die;
@@ -115,39 +143,51 @@ class ProductController extends BaseController
                 $dataProduct['product_name'] = $product_name;
                 $dataProduct['category_id'] = $category_id;
                 $dataProduct['description'] = $description;
-                
-                $resultID = $productModel->updateIdTable($dataProduct,$id);//insertTable truyền vào phải là một array trong đó key là tên cột
-                
+                $productModel->updateIdTable($dataProduct,$id);
+
                 $variants = $_POST['variant']; 
                 //?
                 // print_r( $variants);
              
                 foreach ($variants as $variant) {
-                    // if (empty($variant['color']) || empty($variant['size']) || empty($variant['stock']) || empty($variant['price'])) {
-                    //     continue;
-                    // }
-                    // var_dump($variant);
-                    $dataVariants = array(
-                        'product_id' => $id,
-                        'color_id' => $variant["color"],
-                        'size_id' => $variant["size"],
-                        'stock' => $variant["stock"],
-                        'price' => $variant["price"],
+                    if (empty($variant['color']) || empty($variant['size']) || empty($variant['stock']) || empty($variant['price'])) {
+                        continue;
+                    }
 
-                    );  // khởi tạo 1 array trống mới
-                    $dataVariant['product_id'] = $resultID;
-                    $vr_id= $variant["id"];
-                //   var_dump($dataVariants);
-                //   die();
-                    // $dataVariant['color_id'] = $variant['color'];
-                    // $dataVariant['size_id'] = $variant['size'];
-                    // $dataVariant['stock'] = $variant['stock'];
-                    // $dataVariant['price'] = $variant['price'];
-                   $a = $productVariantModel->updateIdTable($dataVariants,$vr_id);
-                 
+                    $dataVariant['color_id'] = $variant['color'];
+                    $dataVariant['size_id'] = $variant['size'];
+                    $dataVariant['stock'] = $variant['stock'];
+                    $dataVariant['price'] = $variant['price'];
+                    $dataVariant['product_id'] = $id;
+
+                    $variantID= $variant["id"]; //?
+                    // pp($variants);
+
+               
+                    $productVariantModel->updateIdTable($dataVariant,$variantID);
+
+                    if (!empty($_FILES['image' . $key]['name'])) {
+                        $image=$_FILES['image' . $key]['tmp_name'];
+                        $name_file=$_FILES['image' . $key]['name'];
+                        $vi_tri= ROOT_FOLDER . "/uploads/products/".$name_file;
+
+                        if(move_uploaded_file($image, $vi_tri)){
+                            echo "Upload thành công";
+                        }else{
+                            echo "Upload không thành công";
+                        }
+
+                        $productImageModel->deleteByProductVariantID($variantID);
+
+                        $dataImage = []; 
+                        $dataImage['product_variant_id'] = $variantID;
+                        $dataImage['image_url'] = $name_file;
+                        $dataImage['is_primary'] = 1;
+                        $productImageModel->insertTable($dataImage);
+                    }
                 }
 
-                $this->route->redirectAdmin('product');// this gọi đến chính bản thân class đó: CategoryController được kế thừa từ BaseController
+                $this->route->redirectAdmin('product');
             }
         }
         $data['productById'] = $productById;

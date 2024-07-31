@@ -15,7 +15,6 @@
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Users</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item"><a href="form-basic.html" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Add </span></a></li>
                         <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('list-user') ?>" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> List </span></a></li>
                     </ul>
                 </li>
@@ -25,7 +24,12 @@
                         <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('list-order') ?>" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> List </span></a></li>
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= $route->getLocateAdmin('list-review') ?>" aria-expanded="false"><i class="mdi mdi-blur-linear"></i><span class="hide-menu">Comments</span></a></li>
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Reviews</span></a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('review_add')  ?>" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Add </span></a></li>
+                        <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('review_list') ?>" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> List </span></a></li>
+                    </ul>
+                </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Category </span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('category_add')  ?>" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Add </span></a></li>
