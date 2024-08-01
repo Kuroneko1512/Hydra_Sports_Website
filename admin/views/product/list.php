@@ -55,7 +55,7 @@
                     </thead>
                     <tbody class="customtable">
                         <?php foreach ($products as $product) { ?>
-                                <tr>
+                            <tr>
                                 <td>
                                     <label class="customcheckbox">
                                         <input type="checkbox" class="listCheckbox" />
@@ -64,7 +64,7 @@
                                 </td>
                                 <td><?= $product['id'] ?></td>
                                 <td>
-                                    <a href="#" class="product-name" data-product-id="1"><?= $product['product_name'] ?></a>
+                                    <a href="#" class="product-name" data-product-id="<?= $product['id'] ?>"><?= $product['product_name'] ?></a>
                                 </td>
                                 <td><?php
                                 foreach ($categories as $cat)

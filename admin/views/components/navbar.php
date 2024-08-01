@@ -68,7 +68,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="<?= $route->getLocateAdmin('product') ?>" class="sidebar-link">
+                            <a href="<?= $route->getLocateAdmin('list-product') ?>" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>
                                 <span class="hide-menu"> List </span>
                             </a>

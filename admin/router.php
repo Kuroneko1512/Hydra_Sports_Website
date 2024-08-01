@@ -28,18 +28,21 @@ match ($route->getAct()) {
     'validate-category-data' => (new CategoryController())->validateCategoryData(),
     'validate-edit-category-data' => (new CategoryController())->validateEditCategoryData(),
 
+    // Product
+    'list-product' => (new ProductController())->list(),
+    'get-product-variant' => (new ProductController())->getProductVariant(),
+
+    // Product Variant
+
+    //Variant
+    
     // Review
     'list-review' => (new ReviewController())->list(),
 
     // Order
     'list-order' => (new OrderController())->list(),
-
     
-
     
-    'product' =>(new ProductController())->index(),
-    'product_add' =>(new ProductController())->add(),
-    'product_edit' =>(new ProductController())->edit(),
 
 
 

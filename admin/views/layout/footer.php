@@ -57,6 +57,8 @@
             var validateEditUserDataUrl = '<?= $route->getLocateAdmin("validate-edit-user-data") ?>';
             var validateCategoryUrl = '<?= $route->getLocateAdmin("validate-category-data") ?>';
             var validateEditCategoryUrl = '<?= $route->getLocateAdmin("validate-edit-category-data") ?>';
+            var getProductVariantUrlBase = '<?= $route->getLocateAdmin("get-product-variant") ?>';
+            
         </script>
         <script src="lib/admin/dist/js/debounce-validate-form.js"></script>
         <script src="lib/admin/dist/js/product-show-variant.js"></script>
