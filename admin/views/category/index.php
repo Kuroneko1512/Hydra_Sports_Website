@@ -44,13 +44,8 @@
                                     </th>
                                     <th scope="col">ID</th>
                                     <th scope="col">Category Name</th>
-                                    <!-- <th scope="col">UserName</th>
-                                    <th scope="col">PassWord</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Role</th> -->
                                     <th scope="col">Status</th>
+                                    <th scope="col">Image</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -65,12 +60,7 @@
                                     </td>
                                     <td><?php echo $category['id'];?></td>
                                     <td><?php echo $category['category_name'];?></td>
-                                    <!-- <td>hunttph47401</td>
-                                    <td>hungtran</td>
-                                    <td>hungttph47401@fpt.edu.com</td>
-                                    <td>Hà Nội</td>
-                                    <td>+84 123 456 789</td>
-                                    <td>admin</td> -->
+                                    <td><img src="<?= BASE_URL?>/uploads/categories/<?=$category['image']?>" height="100" width="100"   alt="">  </td>
                                     <td><?= ($category['status'] == 1 ) ? "Active" : "Inactive" ?></td>
                                     <td>
                                         <a href="<?= $route->getLocateAdmin('category_edit') ?>&id=<?= $category['id'] ?>">

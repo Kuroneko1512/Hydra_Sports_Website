@@ -10,6 +10,11 @@ abstract class BaseController {
         global $viewApp;
         $this->route = $route;
         $this->viewApp = $viewApp;
+
+        $categoryModel = new Category();
+        $categories = $categoryModel->allTable();
+        $this->viewApp->categories = $categories;
+        
         $this->loadModels();
     }
 

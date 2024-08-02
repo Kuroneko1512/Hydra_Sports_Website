@@ -14,7 +14,7 @@ class CoreApp {
     public function initApp($prefix) {
         global $route;
         $this->loadControllers($prefix);
-        $this->loadModels($prefix);
+        $this->loadModels('admin');
 
         require_once join(DIRECTORY_SEPARATOR, array('.', $prefix, 'router.php'));
     }

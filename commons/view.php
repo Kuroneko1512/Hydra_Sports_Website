@@ -1,10 +1,12 @@
 <?php
 class BaseView {
     public $title = '';
+    public $categories = [];
     public function requestComponents($name, $data = []) {
         global $route;
         global $viewApp;
-        
+
+        $data['categories'] = $this->categories;
         extract($data);
         $name = join(DIRECTORY_SEPARATOR, explode(".", $name));
         include(join(DIRECTORY_SEPARATOR, array('.', $route->isAdminPage ? 'admin' : 'clients', 'views', "components", "{$name}.php")));

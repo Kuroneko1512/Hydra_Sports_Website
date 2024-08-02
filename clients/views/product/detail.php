@@ -4,15 +4,13 @@
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                    <span class="breadcrumb-item active">Shop Detail</span>
+                    <span class="breadcrumb-item active">Product Detail</span>
                 </nav>
             </div>
         </div>
     </div>
     <!-- Breadcrumb End -->
 
-    <?=print_r($data);?>
     <form action="" method="POST">
         <!-- Shop Detail Start -->
         <div class="container-fluid pb-5">

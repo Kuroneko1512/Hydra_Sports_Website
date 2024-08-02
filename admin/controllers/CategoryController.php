@@ -21,28 +21,39 @@ class CategoryController extends BaseController
         if(isset($_POST['btn-add'])) {
             $category_name = $_POST['category_name'];
             $status=$_POST['status'];
+            
+            $image=$_FILES['image']['tmp_name'];
+            $name_file= uniqid() .  $_FILES['image']['name'];
+            $vi_tri= ROOT_FOLDER . "/uploads/categories/". $name_file;
+            if(move_uploaded_file($image, $vi_tri)){
+                echo "Upload thành công";
+            }else{
+                echo "Upload không thành công";
+            }
+        
             $error=[];
             if(empty($_POST['category_name'])){
                 $error['category_name'] = "Bạn cần nhập tên danh mục";
                 $data['error'] = $error;
             }
-
+            // pp($data);
             if(empty($error)){
                 $data['category_name'] = $category_name;
                 $data['status'] = $status;
-                $categoryModel->insertTable($data);//insertTable truyền vào phải là một array trong đó key là tên cột
+                $data['image'] = $name_file;
+                $categoryModel->insertTable($data);
                 $this->route->redirectAdmin('category');// this gọi đến chính bản thân class đó: CategoryController được kế thừa từ BaseController
             }
         }
         $this->viewApp->requestView('category.add', $data);//hiển thị template category view và đổ ra bên ngoài biến $data
     }
 
-    // public function category_delete(){
-    //     $categoryModel = new Category();
-    //     $id=$_GET['id'];
-    //     $categoryModel->removeIdTable($id);
-    //     $this->route->redirectAdmin('category');
-    // }
+    public function category_delete(){
+        $categoryModel = new Category();
+        $id=$_GET['id'];
+        $categoryModel->removeIdTable($id);
+        $this->route->redirectAdmin('category');
+    }
 
     public function edit(){
         $categoryModel = new Category();
@@ -54,10 +65,27 @@ class CategoryController extends BaseController
             $category_name = $_POST['category_name'];
             $status = $_POST['status'];
             $error=[];
+            $dataUpdate=[];
             if(empty($_POST['category_name'])){
                 $error['category_name'] = "Bạn cần nhập tên danh mục";
                 $data['error'] = $error;
             }
+
+            $dataUpdate['image'] = $categoryById['image'];
+        
+            if (!empty($_FILES['image']['name'])) {
+                $image=$_FILES['image']['tmp_name'];
+                $name_file= uniqid() .  $_FILES['image']['name'];
+                $vi_tri= ROOT_FOLDER . "/uploads/categories/". $name_file;
+                if(move_uploaded_file($image, $vi_tri)){
+                    echo "Upload thành công";
+                }else{
+                    echo "Upload không thành công";
+                }
+
+                $dataUpdate['image'] = $name_file;
+            }
+
             if(empty($error)){
                 $dataUpdate['category_name'] = $category_name;
                 $dataUpdate['status'] = $status;

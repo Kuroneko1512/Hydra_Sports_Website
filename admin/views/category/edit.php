@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post">
+<form class="form-horizontal" method="post" enctype="multipart/form-data">
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -9,6 +9,12 @@
                         <label for="fname" class="col-sm-3 text-right control-label col-form-label">Category Name</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="fname" placeholder="First Name Here" name="category_name" value="<?php echo $categoryById['category_name'] ?>" >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="fname" class="col-sm-3 text-right control-label col-form-label">Image</label>
+                        <div class="col-sm-9">
+                            <input type="file" class="form-control" id="fname" placeholder="First Name Here" name="image" >
                         </div>
                     </div>
                     <div class="form-group row">

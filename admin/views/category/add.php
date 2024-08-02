@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post">
+<form class="form-horizontal" method="post" enctype="multipart/form-data">
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -10,6 +10,12 @@
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="fname" placeholder="First Name Here" name="category_name" value="<?php echo isset($_POST['category_name']) ? $_POST['category_name'] : "" ?>" >
                             <p class="error"> <?php if(isset($error['category_name'])) echo $error['category_name'] ?></p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="fname" class="col-sm-3 text-right control-label col-form-label">Image</label>
+                        <div class="col-sm-9">
+                            <input type="file" class="form-control" id="fname" placeholder="" name="image" value="" >
                         </div>
                     </div>
                     <div class="form-group row">
