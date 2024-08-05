@@ -1,5 +1,6 @@
 <?php
 // index phục vụ request của người dùng
+session_start();
 
 // nạp core vào
 require_once './commons/core.php';

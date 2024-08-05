@@ -38,20 +38,18 @@
                         <table id="zero_config1" class="table table-striped table-bordered">
                             <thead class="">
                                 <tr>
-                                    <th>
+                                    <!-- <th>
                                         <label class="customcheckbox m-b-20">
                                             <input type="checkbox" id="mainCheckbox" />
                                             <span class="checkmark"></span>
                                         </label>
-                                    </th>
+                                    </th> -->
                                     <th scope="col">ID</th>
-                                    <th scope="col">FullName</th>
                                     <th scope="col">UserName</th>
-                                    <th scope="col">PassWord</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Address</th>
                                     <th scope="col">Phone</th>
-                                    <th scope="col">Role</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Date</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -59,8 +57,30 @@
                             <tbody class="customtable">
                                 
                                 <?php if ($orders): ?>
-                                    <?php foreach($orders as $orders): ?>
-
+                                    <?php foreach($orders as $order): ?>
+                                        <tr>
+                                                <!-- <td>
+                                                    <label class="customcheckbox">
+                                                        <input type="checkbox" class="listCheckbox" />
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </td> -->
+                                                <td><?= $order['id'] ?></td>
+                                                <td><?= $order['customer_name'] ?></td>
+                                                <td><?= $order['customer_email'] ?></td>
+                                                <td><?= $order['customer_phone'] ?></td>
+                                                <td><?= $order['shipping_address'] ?></td>
+                                                <td><?= $order['order_date'] ?></td>
+                                                <td><?= $order['order_status'] ?></td>
+                                                <td>
+                                                    <a href="<?= $route->getLocateAdmin('product_edit') ?>&id=<?= $order['id'] ?>">
+                                                        <button type="button" class="btn btn-cyan btn-sm">Edit</button>
+                                                    </a>
+                                                    <a href="<?= $route->getLocateAdmin('') ?>&id=<?= $order['id'] ?>" onclick="return confirm ('Bạn có muốn xóa không')" >
+                                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                                    </a>
+                                                </td>
+                                            </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <!-- <tr><td colspan="11">No data</td></tr> -->

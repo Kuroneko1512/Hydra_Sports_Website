@@ -78,7 +78,6 @@
                                 </button>
                             </div>
                             <input type="text" class="form-control bg-secondary border-0 text-center" value="1" name="quantity">
-                            <input type="hidden" id="variant_id" class="form-control bg-secondary border-0 text-center" value="" name="variant_id">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-plus">
                                     <i class="fa fa-plus"></i>
@@ -87,6 +86,7 @@
                         </div>
                             <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i>   Add To
                             Cart  </button>
+                            <input type="hidden" id="variant_id" class="form-control bg-secondary border-0 text-center" value="" name="variant_id">
                     </div>
                     </form>
                     <div class="d-flex pt-2">

@@ -38,16 +38,16 @@
                         <table id="zero_config1" class="table table-striped table-bordered">
                             <thead class="">
                                 <tr>
-                                    <th>
+                                    <!-- <th>
                                         <label class="customcheckbox m-b-20">
                                             <input type="checkbox" id="mainCheckbox" />
                                             <span class="checkmark"></span>
                                         </label>
-                                    </th>
+                                    </th> -->
                                     <th scope="col">ID</th>
-                                    <th scope="col">User_ID</th>
-                                    <th scope="col">Product_ID</th>
-                                    <th scope="col">Order_ID</th>
+                                    <th scope="col">User name</th>
+                                    <th scope="col">Product name</th>
+                                    <th scope="col">Order name</th>
                                     <th scope="col">Rating</th>
                                     <th scope="col">Content</th>
                                     <th scope="col">Created_Date</th>
@@ -57,12 +57,12 @@
                             <tbody class="customtable">
                                 <?php foreach ($reviews as $review) {?>
                                 <tr>
-                                    <td>
+                                    <!-- <td>
                                         <label class="customcheckbox">
                                             <input type="checkbox" class="listCheckbox" />
                                             <span class="checkmark"></span>
                                         </label>
-                                    </td>
+                                    </td> -->
                                     <td><?= $review['id'] ?></td>
                                     <td>
                                         <?php foreach ($users as $user)

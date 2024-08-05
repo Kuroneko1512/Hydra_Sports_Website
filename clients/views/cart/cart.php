@@ -12,7 +12,7 @@
     </div>
     <!-- Breadcrumb End -->
 
-
+    <form method="post" action="<?= $route->getLocateClient('checkout') ?>">
     <!-- Cart Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
@@ -54,6 +54,7 @@
                     </tbody>
                 </table>
             </div>
+            
             <div class="col-lg-4">
                 <form class="mb-30" action="">
                     <div class="input-group">
@@ -86,4 +87,5 @@
             </div>
         </div>
     </div>
+    </form>
     <!-- Cart End -->
