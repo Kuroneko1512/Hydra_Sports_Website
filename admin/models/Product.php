@@ -39,4 +39,24 @@ class Product extends BaseModel
         }
     }
 
+    public function countProducts($cat) { // Đếm tổng số sản phẩm
+        try {
+            global $coreApp;
+            // $sql = "SELECT * FROM {$this->tableName} ORDER BY {$this->id} DESC";
+            $sql = "SELECT COUNT(id) AS NumberOfProducts FROM `{$this->tableName}` ";
+
+            if (!empty($cat)) {
+                $sql .= " WHERE category_id= {$cat} ";
+            }
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch();
+
+            return $result['NumberOfProducts'];
+        } catch (Exception $e) {
+            $coreApp->debug($e);
+        }
+    }
+
 }

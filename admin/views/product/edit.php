@@ -37,7 +37,8 @@
                                 <th></th>
                                 <th>Color</th>
                                 <th>Size</th>
-                                <th>Stock</th>
+                                <th>Quantity</th>
+                                <th>Sold</th>
                                 <th>Price</th>
                                 <th>Image</th>
                                 <th>Action</th>
@@ -73,6 +74,7 @@
                                     <td>
                                         <input type="text" name="variant[<?=$key ?>][stock]" value="<?= $productVariant['stock'] ?>">
                                     </td>
+                                    <td> <input type="number" name="" value="<?= $productVariant['sold'] ?>" >   </td>
                                     <td>
                                         <input type="text" name="variant[<?=$key ?>][price]" value="<?= $productVariant['price'] ?>">
                                     </td>

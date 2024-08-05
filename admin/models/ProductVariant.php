@@ -15,4 +15,20 @@ class ProductVariant extends BaseModel
             $coreApp->debug($e);
         }
     }
+
+    public function getProductName($variant_id) {
+        try {
+            global $coreApp;
+            $sql = "SELECT p.product_name FROM {$this->tableName} pv
+            INNER JOIN product p ON p.id = pv.product_id
+            where pv.id = $variant_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch();
+            
+            return $result['product_name'];
+        } catch (Exception $e) {
+            $coreApp->debug($e);
+        }
+    }
 }

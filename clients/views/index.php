@@ -132,7 +132,7 @@
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href=""><?= $product['product_name'] ?></a>
+                        <a class="h6 text-decoration-none text-truncate" href="<?= $route->getLocateClient('product_detail') ?>&id=<?= $product['id'] ?>"><?= $product['product_name'] ?></a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5>$<?= $product['price'] ?></h5><h6 class="text-muted ml-2"><del>$0</del></h6>
                         </div>

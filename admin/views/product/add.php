@@ -33,7 +33,8 @@
                         <th></th>
                         <th>Color</th>
                         <th>Size</th>
-                        <th>Stock</th>
+                        <th>Quantity</th>
+                        <th>Sold</th>
                         <th>Price</th>
                         <th>Image</th>
                         <th>Action</th>
@@ -63,6 +64,9 @@
                             </td>
                             <td>
                                 <input type="text" name="variant[0][stock]" value="">
+                            </td>
+                            <td>
+                                <input type="text" name="variant[0][sold]" value="">
                             </td>
                             <td>
                                 <input type="text" name="variant[0][price]" value="">
@@ -102,8 +106,12 @@
                                 <input type="text" name="variant[1][stock]" value="">
                             </td>
                             <td>
+                                <input type="text" name="variant[1][sold]" value="">
+                            </td>
+                            <td>
                                 <input type="text" name="variant[1][price]" value="">
                             </td>
+                           
                             <td>
                                 <input type="file" name="image1">
                             </td>

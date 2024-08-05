@@ -46,6 +46,7 @@
                                                 <th scope="col">Description</th>
                                                 <th scope="col">Created</th>
                                                 <th scope="col">Updated</th>
+                                                <th scope="col">Available</th>
                                                 <th scope="col">Views</th>
                                                 <th scope="col">Sales</th>
                                                 <th scope="col">Reviews</th>
@@ -74,6 +75,7 @@
                                                 <td><?= $product['description'] ?></td>
                                                 <td><?= $product['created_date'] ?></td>
                                                 <td><?= $product['updated_date'] ?></td>
+                                                <td><?= $product['available'] ?></td>
                                                 <td><?= $product['view_count'] ?></td>
                                                 <td><?= $product['purchase_count'] ?></td>
                                                 <td><?= $product['comment_count'] ?></td>

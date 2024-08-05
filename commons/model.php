@@ -45,7 +45,6 @@ class BaseModel {
         try {
             global $coreApp;
             $sql = "SELECT * FROM `{$this->tableName}` WHERE id = :id"; //:id là tham số - param, id là tên cột
-    
             $stmt = $this->conn->prepare($sql);
         
             $stmt->execute([':id' => $id]);

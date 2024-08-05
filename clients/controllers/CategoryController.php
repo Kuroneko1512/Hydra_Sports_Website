@@ -13,6 +13,8 @@ class CategoryController extends BaseController
         $cat = isset($_GET['cat']) ? $_GET['cat'] : '';
         $limit = 8;
 
+        $countProduct = $productModel->countProducts(null);
+        $data['num_of_products'] = $countProduct;
         $products = $productModel->getProducts($cat, $limit, ($page - 1) * $limit);
 
         foreach ($products as $key => $value) {
@@ -24,7 +26,7 @@ class CategoryController extends BaseController
             $products[$key]['image_url'] = isset($productImages[0]['image_url']) ? $productImages[0]['image_url'] : '';
         }
         $data['products'] = $products;
-        $this->viewApp->requestView('category.category', $data);
+        $this->viewApp->requestView('productList.list', $data);
     }
 
 
