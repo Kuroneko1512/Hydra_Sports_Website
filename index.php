@@ -1,4 +1,5 @@
 <?php
+session_start();
 // index phục vụ request của người dùng
 
 // nạp core vào

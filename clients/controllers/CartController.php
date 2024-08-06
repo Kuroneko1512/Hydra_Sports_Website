@@ -27,6 +27,7 @@
                     $dataOrder = [];  
                     // $dataOrder['order_status'] = 0;
                     $dataOrder['payment_status'] = 0;
+                    $dataOrder['order_status'] = 0;
                     $orderID = $orderModel->insertTable($dataOrder);
                     $_SESSION['order_id'] = $orderID;
                 }

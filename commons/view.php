@@ -24,5 +24,15 @@ class BaseView {
         include(join(DIRECTORY_SEPARATOR, array('.', $route->isAdminPage ? 'admin' : 'clients','views', "{$name}.php")));
         include(join(DIRECTORY_SEPARATOR, array('.', $route->isAdminPage ? 'admin' : 'clients','views', "layout", "footer.php")));
     }
+
+    public function requestGuestView($name, $data = []) { // login
+        global $route;
+        global $viewApp;
+        $data['title'] = $this->title;
+
+        extract($data);
+        $name = join(DIRECTORY_SEPARATOR, explode(".", $name));
+        include(join(DIRECTORY_SEPARATOR, array('.', $route->isAdminPage ? 'admin' : 'clients','views', "{$name}.php")));
+    }
 }
 ?>

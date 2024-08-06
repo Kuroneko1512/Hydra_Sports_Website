@@ -40,11 +40,11 @@
                             <label>Address Line 1</label>
                             <input class="form-control" type="text" placeholder="123 Street">
                         </div>
-                        <div class="col-md-6 form-group">
+                        <!-- <div class="col-md-6 form-group">
                             <label>Address Line 2</label>
                             <input class="form-control" type="text" placeholder="123 Street">
-                        </div>
-                        <div class="col-md-6 form-group">
+                        </div> -->
+                        <!-- <div class="col-md-6 form-group">
                             <label>Country</label>
                             <select class="custom-select">
                                 <option selected>United States</option>
@@ -52,8 +52,8 @@
                                 <option>Albania</option>
                                 <option>Algeria</option>
                             </select>
-                        </div>
-                        <div class="col-md-6 form-group">
+                        </div> -->
+                        <!-- <div class="col-md-6 form-group">
                             <label>City</label>
                             <input class="form-control" type="text" placeholder="New York">
                         </div>
@@ -64,22 +64,22 @@
                         <div class="col-md-6 form-group">
                             <label>ZIP Code</label>
                             <input class="form-control" type="text" placeholder="123">
-                        </div>
+                        </div> -->
                         <div class="col-md-12 form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="newaccount">
                                 <label class="custom-control-label" for="newaccount">Create an account</label>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="shipto">
                                 <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="collapse mb-5" id="shipping-address">
+                <!-- <div class="collapse mb-5" id="shipping-address">
                     <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
                     <div class="bg-light p-30">
                         <div class="row">
@@ -130,9 +130,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="border-bottom">
@@ -191,7 +191,7 @@
                         <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- Checkout End -->

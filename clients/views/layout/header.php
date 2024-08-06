@@ -46,10 +46,17 @@
                 <div class="d-inline-flex align-items-center">
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">Sign in</button>
-                            <button class="dropdown-item" type="button">Sign up</button>
-                        </div>
+                        <?php if(isset($_SESSION['user'])) { ?>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <button class="dropdown-item" type="button"> Hello <?= $_SESSION['user']['username'] ?></button>
+                                <button class="dropdown-item" type="button"><a href="<?= $route->getLocateClient('logout') ?>"> Logout</a></button>
+                            </div>
+                        <?php } else {?>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <button class="dropdown-item" type="button"> <a href="<?= $route->getLocateClient('login') ?>"> Sign in</a> </button>
+                                <button class="dropdown-item" type="button"><a href="<?= $route->getLocateClient('signup') ?>"> Sign up</a></button>
+                            </div>
+                        <?php }?>
                     </div>
                     <div class="btn-group mx-2">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
