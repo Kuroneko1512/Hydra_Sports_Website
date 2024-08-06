@@ -23,9 +23,19 @@
             $this->viewApp->requestView('Users.create');
         }
         public function postCreate(){
-            $userCreateForm = $this->route->form;
+            $userCreateForm = (object) $this->route->form;
             $errors = $this->validateUserDataInternal((object)$userCreateForm, false);
+            
+            // Xử lý ảnh tải lên
+            $file = isset($_FILES['avatar']) ? $_FILES['avatar'] : null;
+            $result = $this->handleImageUpload($file);
 
+            if (isset($result['errors'])) {
+                $errors = array_merge($errors, $result['errors']);
+            } else {
+                $userCreateForm->avatar = $result; // Cập nhật ảnh mới
+            }
+            
             if (!empty($errors)) {
                 $this->viewApp->requestView('Users.create', ['errors' => $errors, 'user' => $userCreateForm]);
                 return;
@@ -39,10 +49,30 @@
             $userUpdate = $this->userModel->findIdTable($id);
             $this->viewApp->requestView('Users.edit',['user' => $userUpdate]);
         }
+        
         public function postEdit(){
             $id = $this->route->getId();
-            $userEditForm = $this->route->form;
+            $userEditForm = (object)$this->route->form;
             $errors = $this->validateUserDataInternal((object)$userEditForm, true);
+
+            // Lấy thông tin người dùng hiện tại
+            $currentUser = (object)$this->userModel->findIdTable($id);
+                
+             // Xử lý ảnh tải lên
+            $file = isset($_FILES['avatar']) ? $_FILES['avatar'] : null;
+            if ($file && $file['error'] === UPLOAD_ERR_OK && !empty($file['name'])) {
+                // Có ảnh mới tải lên
+                $result = $this->handleImageUpload($file, $currentUser->avatar);
+
+                if (isset($result['errors'])) {
+                    $errors = array_merge($errors, $result['errors']);
+                } else {
+                    $userEditForm->avatar = $result; // Cập nhật ảnh mới
+                }
+            } else {
+                // Không có ảnh mới, giữ ảnh cũ
+                $userEditForm->avatar = $currentUser->avatar;
+            }
 
             if (!empty($errors)) {
                 $this->viewApp->requestView('Users.edit', ['errors' => $errors, 'user' => $userEditForm]);
@@ -50,8 +80,44 @@
             }     
 
             $this->userModel->updateIdTable($userEditForm,$id);
+            
             $this->route->redirectAdmin('list-user');
         }
+
+        // Xử lý ảnh
+        private function handleImageUpload($file, $currentAvatar = null) {
+            $errors = [];
+        
+            // Kiểm tra tệp tải lên
+            if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
+                // Lấy thông tin tệp
+                $fileName = basename($file['name']);
+                $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                
+                // Tạo tên file đặc biệt
+                $uniqueFileName = uniqid('img_', true) . '.' . $fileType;
+                $targetDir = "uploads/user/" . $uniqueFileName;
+        
+                // Xóa ảnh cũ nếu có
+                if ($currentAvatar && file_exists("uploads/user/" . $currentAvatar)) {
+                    unlink("uploads/user/" . $currentAvatar);
+                }
+        
+                // Di chuyển tệp tải lên tới thư mục đích
+                if (move_uploaded_file($file['tmp_name'], $targetDir)) {
+                    return $uniqueFileName; // Trả về tên ảnh mới
+                } else {
+                    $errors[] = "Không thể upload ảnh. Vui lòng thử lại.";
+                }
+            } else {
+                $errors[] = "Không có ảnh tải lên hoặc có lỗi khi tải lên.";
+            }
+        
+            // Trả về mảng lỗi nếu có
+            return ['errors' => $errors];
+        }
+        
+        
         public function checkPostGet(){
             // var_dump($this->route->form);
             // var_dump($this->route->method);
@@ -169,4 +235,5 @@
             }
         }
 
+        
     }

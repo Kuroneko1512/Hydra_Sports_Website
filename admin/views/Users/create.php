@@ -38,10 +38,20 @@
         <!-- ============================================================== -->
         <div class="row">
             <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
-                
+
                 
                 <!-- <form action="" method="POST" id="createUserForm"> -->
-                <form action="<?= $route->getLocateAdmin('post-create-user') ?>" method="POST" id="createUserForm">
+                <form action="<?= $route->getLocateAdmin('post-create-user') ?>" method="POST" id="createUserForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Avatar</label>
+                        <input type="file" class="form-control" name="avatar" accept="image/*">
+                        <span id="avatar-error" class="error-message text-danger">
+                            <?php if (isset($errors['avatar'])) : ?>
+                                <?= $errors['avatar'] ?>
+                            <?php endif; ?>
+                        </span>
+                    </div>
+
                     <div class="mb-3">
                         <label for="" class="form-label">Full name</label>
                         <input  type="text" class="form-control"  name="full_name" placeholder="Full name">

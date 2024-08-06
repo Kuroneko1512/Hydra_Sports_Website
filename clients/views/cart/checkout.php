@@ -12,7 +12,7 @@
     </div>
     <!-- Breadcrumb End -->
 
-
+    <form method="post" action="<?= $route->getLocateClient('checkout') ?>">
     <!-- Checkout Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
@@ -194,4 +194,5 @@
             </div>
         </div>
     </div>
+    </form>
     <!-- Checkout End -->

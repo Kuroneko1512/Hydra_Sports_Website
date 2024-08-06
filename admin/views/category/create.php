@@ -39,8 +39,17 @@
         <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
 
             <!-- <form action="" method="Post"> -->
-            <form action="<?= $route->getLocateAdmin('post-create-category') ?>" method="Post" id="createCategoryForm">
-                
+            <form action="<?= $route->getLocateAdmin('post-create-category') ?>" method="Post" id="createCategoryForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="" class="form-label">Image</label>
+                    <input type="file" class="form-control" name="image" accept="image/*">
+                    <span id="image-error" class="error-message text-danger">
+                        <?php if (isset($errors['image'])) : ?>
+                            <?= $errors['image'] ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
+
                 <div class="mb-3">
                     <label for="" class="form-label">Category Name</label>
                     <input type="text" class="form-control"  name="category_name" placeholder="Category name">

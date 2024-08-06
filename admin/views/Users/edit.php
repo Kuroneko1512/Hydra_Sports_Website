@@ -39,8 +39,21 @@
         <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
 
             <!-- <form action="" method="Post"> -->
-            <form action="<?= $route->getLocateAdmin('post-edit-user', ['id' => $user['id']]) ?>" method="Post" id="editUserForm">
+            <form action="<?= $route->getLocateAdmin('post-edit-user', ['id' => $user['id']]) ?>" method="Post" id="editUserForm" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Avatar</label>
+                    <input type="file" class="form-control" name="avatar" id="avatar" >
+                    <span id="avatar-error" class="error-message text-danger">
+                        <?php if (isset($errors['avatar'])) : ?>
+                            <?= $errors['avatar'] ?>
+                        <?php endif; ?>
+                    </span>
+                    <?php if (!empty($user['avatar'])) : ?>
+                        <img src="uploads/user/<?= $user['avatar'] ?>" alt="Avatar" class="img-thumbnail mt-2" style="max-width: 100px;">
+                    <?php endif; ?>
+                </div>
 
                 <div class="mb-3">
                     <label for="" class="form-label">Full name</label>

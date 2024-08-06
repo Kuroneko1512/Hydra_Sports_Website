@@ -31,13 +31,26 @@ match ($route->getAct()) {
     // Product
     'list-product' => (new ProductController())->list(),
     'get-product-variant' => (new ProductController())->getProductVariant(),
-
+    'create-product' => (new ProductController())->create(),
+    'post-create-product' => (new ProductController())->store(),
+    'edit-product'=> (new ProductController())->edit(),
+    'post-edit-product' => (new ProductController()) -> update(),
     // Product Variant
 
     //Variant
-    
+    'color' => (new ProductController()) -> color(),
+    'add-color' => (new ProductController()) -> addColor(),
+    'edit-color' => (new ProductController()) -> editColor(),
+    'validate-color-data' => (new ProductController()) -> validateColorData(),
+
+    'size' => (new ProductController()) -> size(),
+    'add-size' => (new ProductController()) -> addSize(),
+    'edit-size' => (new ProductController()) -> editSize(),
+    'validate-size-data' => (new ProductController()) -> validateSizeData(),
     // Review
-    'list-review' => (new ReviewController())->list(),
+    // 'list-review' => (new ReviewController())->list(),
+    'review_list' => (new ReviewController())->index(),
+    'review_add' => (new ReviewController())->add(),
 
     // Order
     'list-order' => (new OrderController())->list(),

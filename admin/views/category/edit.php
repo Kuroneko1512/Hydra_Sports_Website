@@ -39,8 +39,21 @@
         <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
 
             <!-- <form action="" method="Post"> -->
-            <form action="<?= $route->getLocateAdmin('post-edit-category', ['id' => $category['id']]) ?>" method="Post" id="editCategoryForm">
+            <form action="<?= $route->getLocateAdmin('post-edit-category', ['id' => $category['id']]) ?>" method="Post" id="editCategoryForm" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $category['id'] ?>">
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Image</label>
+                    <input type="file" class="form-control" name="image" id="avatar" >
+                    <span id="image-error" class="error-message text-danger">
+                        <?php if (isset($errors['image'])) : ?>
+                            <?= $errors['image'] ?>
+                        <?php endif; ?>
+                    </span>
+                    <?php if (!empty($category['image'])) : ?>
+                        <img src="uploads/category/<?= $category['image'] ?>" alt="image" class="img-thumbnail mt-2" style="max-width: 100px;">
+                    <?php endif; ?>
+                </div>
 
                 <div class="mb-3">
                     <label for="" class="form-label">Category Name</label>

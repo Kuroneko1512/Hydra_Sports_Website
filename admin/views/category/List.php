@@ -53,6 +53,7 @@
                                         </label>
                                     </th>
                                     <th scope="col">ID</th>
+                                    <th scope="col">Image</th>
                                     <th scope="col">Category Name</th>                                    
                                     <th scope="col">Description</th>                                    
                                     <th scope="col">Status</th>
@@ -70,6 +71,9 @@
                                                 </label>
                                             </td>
                                             <td><?= $category['id'] ?></td>
+                                            <td>
+                                                <img src="uploads/category/<?= $category['image'] ?>" alt="" width="50px" >
+                                            </td>
                                             <td><?= $category['category_name'] ?></td>
                                             <td><?= $category['description'] ?></td>
                                             <td><?= ($category['status'] == 1) ? 'Active' : 'Inactive' ?></td>

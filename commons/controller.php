@@ -10,7 +10,13 @@ abstract class BaseController {
         global $viewApp;
         $this->route = $route;
         $this->viewApp = $viewApp;
+
+        $categoryModel = new Category();
+        $categories = $categoryModel->allTable();
+        $this->viewApp->categories = $categories;
+        
         $this->loadModels();
+        
     }
 
     // abstract function: Khi có 1 class khác kế thừa class này. Thì trong class đấy sẽ phải khai báo phương thức này

@@ -58,6 +58,10 @@
             var validateCategoryUrl = '<?= $route->getLocateAdmin("validate-category-data") ?>';
             var validateEditCategoryUrl = '<?= $route->getLocateAdmin("validate-edit-category-data") ?>';
             var getProductVariantUrlBase = '<?= $route->getLocateAdmin("get-product-variant") ?>';
+            var validateColorUrl = '<?= $route->getLocateAdmin("validate-color-data") ?>';
+            var validateEditColorUrl = '<?= $route->getLocateAdmin("validate-edit-color-data") ?>';
+            var validateSizeUrl = '<?= $route->getLocateAdmin("validate-size-data") ?>';
+            var validateEditSizeUrl = '<?= $route->getLocateAdmin("validate-edit-size-data") ?>';
             
         </script>
         <script src="lib/admin/dist/js/debounce-validate-form.js"></script>

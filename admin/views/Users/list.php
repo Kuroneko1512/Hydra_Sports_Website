@@ -53,6 +53,7 @@
                                         </label>
                                     </th>
                                     <th scope="col">ID</th>
+                                    <th scope="col">Avatar</th>
                                     <th scope="col">FullName</th>
                                     <th scope="col">UserName</th>
                                     <th scope="col">PassWord</th>
@@ -78,6 +79,9 @@
                                                 <?php endif ?>
                                             </td>
                                             <td><?= $user['id'] ?></td>
+                                            <td>
+                                                <img src="uploads/user/<?= $user['avatar'] ?>" alt="avatar" width="50px" height="50px">
+                                            </td>
                                             <td><?= $user['full_name'] ?></td>
                                             <td><?= $user['username'] ?></td>
                                             <td><?= $user['password'] ?></td>

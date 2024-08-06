@@ -74,8 +74,17 @@ class CategoryController extends BaseController
         $this->viewApp->requestView('category.create');
     }
     public function postCreate(){
-        $categoryCreateForm = $this->route->form;
+        $categoryCreateForm = (object) $this->route->form;
         $errors = $this->validateCategoryDataInternal((object)$categoryCreateForm, false);
+        // Xử lý ảnh tải lên
+        $file = isset($_FILES['image']) ? $_FILES['image'] : null;
+        $result = $this->handleImageUpload($file);
+
+        if (isset($result['errors'])) {
+            $errors = array_merge($errors, $result['errors']);
+        } else {
+            $categoryCreateForm->image = $result; // Cập nhật ảnh mới
+        }
         if (!empty($errors)) {
             $this->viewApp->requestView('category.create', ['errors' => $errors, 'category' => $categoryCreateForm]);
             return;
@@ -90,8 +99,27 @@ class CategoryController extends BaseController
     }
     public function postEdit(){
         $id = $this->route->getId();
-        $categoryEditForm = $this->route->form;   
+        $categoryEditForm = (object) $this->route->form;
         $errors = $this->validateCategoryDataInternal((object)$categoryEditForm, true);
+        // Lấy thông tin danh mục hiện tại
+        $currentCategory = (object)$this->categoryModel->findIdTable($id);
+
+        // Xử lý ảnh tải lên
+        $file = isset($_FILES['image']) ? $_FILES['image'] : null;
+        if ($file && $file['error'] === UPLOAD_ERR_OK && !empty($file['name'])) {
+            // Có ảnh mới tải lên
+            $result = $this->handleImageUpload($file, $currentCategory->image);
+
+            if (isset($result['errors'])) {
+                $errors = array_merge($errors, $result['errors']);
+            } else {
+                $categoryEditForm->image = $result; // Cập nhật ảnh mới
+            }
+        } else {
+            // Không có ảnh mới, giữ ảnh cũ
+            $categoryEditForm->image = $currentCategory->image;
+        }
+
         if (!empty($errors)) {
             $this->viewApp->requestView('category.edit', ['errors' => $errors, 'category' => $categoryEditForm]);
             return;
@@ -99,6 +127,38 @@ class CategoryController extends BaseController
         $this->categoryModel->updateIdTable($categoryEditForm,$id);
         $this->route->redirectAdmin('list-category');
     }  
+    private function handleImageUpload($file, $currentImage = null) {
+        $errors = [];
+    
+        // Kiểm tra tệp tải lên
+        if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
+            // Lấy thông tin tệp
+            $fileName = basename($file['name']);
+            $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            
+            // Tạo tên file đặc biệt
+            $uniqueFileName = uniqid('img_', true) . '.' . $fileType;
+            $targetDir = "uploads/category/" . $uniqueFileName;
+    
+            // Xóa ảnh cũ nếu có
+            if ($currentImage && file_exists("uploads/category/" . $currentImage)) {
+                unlink("uploads/category/" . $currentImage);
+            }
+    
+            // Di chuyển tệp tải lên tới thư mục đích
+            if (move_uploaded_file($file['tmp_name'], $targetDir)) {
+                return $uniqueFileName; // Trả về tên ảnh mới
+            } else {
+                $errors[] = "Không thể upload ảnh. Vui lòng thử lại.";
+            }
+        } else {
+            $errors[] = "Không có ảnh tải lên hoặc có lỗi khi tải lên.";
+        }
+    
+        // Trả về mảng lỗi nếu có
+        return ['errors' => $errors];
+    }
+    
     public function inactive(){
         $id = $this->route->getId();
         $relateTables = 
