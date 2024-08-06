@@ -20,8 +20,16 @@ class ProductController extends BaseController {
     }
     public function list(){
         $products = $this->productModel->allTable();
+   
+        foreach ($products as $key => $value) {
+            $productImages = $this->productVariantImageModel->all_Image_Table($value['id']);
+            // pp($productImages);
+            $products[$key]['image'] = isset($productImages[0]['image_url']) ? $productImages[0]['image_url'] : '';
+        }
         $categories = $this->categoryModel->allTable();
         $data = ['products' => $products, 'categories' => $categories];
+        // pp($products);
+        
         $this->viewApp->requestView('product.list', $data);
     }
     public function getProductVariant() {
