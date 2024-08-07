@@ -7,32 +7,12 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav" class="p-t-30">
                 <li class="sidebar-item"> 
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= $route->getLocateAdmin() ?>" aria-expanded="false">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= $route->getLocateClient() ?>" aria-expanded="false">
                         <i class="mdi mdi-view-dashboard"></i>
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
-                <!-- Users -->
-                <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                        <i class="mdi mdi-receipt"></i>
-                        <span class="hide-menu">Users</span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item">
-                            <a href="<?= $route->getLocateAdmin('create-user') ?>" class="sidebar-link">
-                                <i class="mdi mdi-account-multiple-plus"></i>
-                                <span class="hide-menu"> Add </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="<?= $route->getLocateAdmin('list-user') ?>" class="sidebar-link">
-                                <i class="mdi mdi-account-multiple"></i>
-                                <span class="hide-menu"> List </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+               
                 <!-- Category -->
                 <li class="sidebar-item"> 
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
@@ -40,12 +20,12 @@
                         <span class="hide-menu">Category </span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item">
+                        <!-- <li class="sidebar-item">
                             <a href="<?= $route->getLocateAdmin('category_add') ?>" class="sidebar-link">
                                 <i class="mdi mdi-note-outline"></i>
                                 <span class="hide-menu"> Add </span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="sidebar-item">
                             <a href="<?= $route->getLocateAdmin('list-category') ?>" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>
@@ -61,12 +41,12 @@
                         <span class="hide-menu">Products</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item">
+                        <!-- <li class="sidebar-item">
                             <a href="<?= $route->getLocateAdmin('product_add') ?>" class="sidebar-link">
                                 <i class="mdi mdi-note-outline"></i>
                                 <span class="hide-menu"> Add </span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="sidebar-item">
                             <a href="<?= $route->getLocateAdmin('list-product') ?>" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>
@@ -87,13 +67,27 @@
                         </li>
                     </ul>
                 </li>    
-                <!-- Reviews -->
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Reviews</span></a>
+                 <!-- Users -->
+                 <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i class="mdi mdi-receipt"></i>
+                        <span class="hide-menu">Users</span>
+                    </a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('review_add')  ?>" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Add </span></a></li>
-                        <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('review_list') ?>" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> List </span></a></li>
+                        <!-- <li class="sidebar-item">
+                            <a href="<?= $route->getLocateAdmin('create-user') ?>" class="sidebar-link">
+                                <i class="mdi mdi-account-multiple-plus"></i>
+                                <span class="hide-menu"> Add </span>
+                            </a>
+                        </li> -->
+                        <li class="sidebar-item">
+                            <a href="<?= $route->getLocateAdmin('list-user') ?>" class="sidebar-link">
+                                <i class="mdi mdi-account-multiple"></i>
+                                <span class="hide-menu"> List </span>
+                            </a>
+                        </li>
                     </ul>
-                </li>           
+                </li>
                 <!-- Orders -->
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
@@ -115,6 +109,14 @@
                         </li>
                     </ul>
                 </li>    
+                <!-- Reviews -->
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Reviews</span></a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('review_add')  ?>" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Add </span></a></li>
+                        <li class="sidebar-item"><a href="<?= $route->getLocateAdmin('review_list') ?>" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> List </span></a></li>
+                    </ul>
+                </li>           
+                
                 <!-- <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="pages-buttons.html" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span class="hide-menu">Buttons</span></a></li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">Icons </span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
