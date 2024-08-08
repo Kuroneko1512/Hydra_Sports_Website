@@ -75,7 +75,7 @@
                                 </td>
                                 <td><?= $product['id'] ?></td>
                                 <td>
-                                    <img src="<?= $product['image'] ?>" alt="" width="50px" height="50px">
+                                    <img src="uploads/products/<?= $product['image'] ?>" alt="" width="50px" height="50px">
                                 </td>
                                 <td>
                                     <a href="#" class="product-name" data-product-id="<?= $product['id'] ?>"><?= $product['product_name'] ?></a>

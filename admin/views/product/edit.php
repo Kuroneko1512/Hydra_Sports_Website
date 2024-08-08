@@ -71,7 +71,7 @@
                     <label for="image">Product Image</label>
                     <input type="file" name="image" id="image" class="form-control" accept="image/*">
                     <?php if (!empty($product['image'])): ?>
-                        <img src="<?= $product['image'] ?>" alt="Product Image" width="100">
+                        <img src="uploads/products/<?= $product['image'] ?>" alt="Product Image" width="100">
                     <?php endif; ?>
                     <p class="error"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
                 </div>
@@ -124,7 +124,7 @@
                                             <input type="file" name="variant[<?= $index ?>][images][]" class="form-control" multiple accept="image/*">
                                             <?php if (isset($variant['images']) && is_array($variant['images'])): ?>
                                                 <?php foreach ($variant['images'] as $image): ?>
-                                                    <img src="<?= $image['image_url'] ?>" alt="Variant Image" width="50">
+                                                    <img src="uploads/products/<?= $image['image_url'] ?>" alt="Variant Image" width="50">
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
                                         </td>
