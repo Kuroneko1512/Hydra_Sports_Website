@@ -208,8 +208,10 @@ class ProductController extends BaseController {
     
         // Lưu ảnh chính của sản phẩm
         if (isset($files['image']['tmp_name']) && $files['image']['error'] === UPLOAD_ERR_OK) {
-            $productImage = $targetDir . basename($files['image']['name']);
-            if (move_uploaded_file($files['image']['tmp_name'], $productImage)) {
+            $productImage = time() . "_" . basename($files['image']['name']);
+            $targetProductImage = $targetDir . $productImage;
+            // $productImage = $targetDir . basename($files['image']['name']);
+            if (move_uploaded_file($files['image']['tmp_name'], $targetProductImage)) {
                 // Bắt đầu giao dịch
                 $this->productModel->conn->beginTransaction();
     
@@ -248,14 +250,16 @@ class ProductController extends BaseController {
                             foreach ($files['variant']['tmp_name'][$index]['images'] as $key => $tmpName) {
                                 if ($files['variant']['error'][$index]['images'][$key] === UPLOAD_ERR_OK) {
                                     $imageName = $files['variant']['name'][$index]['images'][$key];
-                                    $targetFile = $targetDir . basename($imageName);
+                                    // $targetFile = $targetDir . basename($imageName);            
+                                    $uploadImage = time() . "_" . basename($imageName);
+                                    $targetFile = $targetDir . $uploadImage;
 
                                     // Di chuyển ảnh từ thư mục tạm đến thư mục đích
                                     if (move_uploaded_file($tmpName, $targetFile)) {
                                         $isPrimary = ($key === 0) ? 1 : 0;
                                         $imageData = [
                                             'product_variant_id' => $productVariantId,
-                                            'image_url' => $targetFile,
+                                            'image_url' => $uploadImage,
                                             'is_primary' => $isPrimary
                                         ];
                                         $imageId = $this->productVariantImageModel->insertTable($imageData);
@@ -315,308 +319,151 @@ class ProductController extends BaseController {
         // Hiển thị view để chỉnh sửa sản phẩm
         $this->viewApp->requestView('product.edit', $data);
     }
+
     public function update() {
-        $data = $_POST;
-        $files = $_FILES;
-        $productId = $data['product_id'];
+        try {
+            $data = $_POST;
+            $files = $_FILES;
+            $productId = $data['product_id'];
+            
+            $this->productModel->conn->beginTransaction();
+    
+            // Xử lý cập nhật thông tin sản phẩm
+            $productData = $this->handleProductUpdate($data, $files, $productId);
+            $this->productModel->updateIdTable($productData, $productId);
+    
+            // Xử lý cập nhật các biến thể
+            $this->handleVariantsUpdate($data, $files, $productId);
+    
+            $this->productModel->conn->commit();
+            $this->route->redirectAdmin('list-product');
+            echo "Product updated successfully!";
+        } catch (Exception $e) {
+            $this->productModel->conn->rollBack();
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    
+    private function handleProductUpdate($data, $files, $productId) {
+        $currentProduct = $this->productModel->findIdTable($productId);
+        $targetDir = "uploads/products/";
+        $productData = [
+            'product_name' => $data['product_name'],
+            'category_id' => $data['category_id'],
+            'description' => $data['description'],
+            'image' => $currentProduct['image']
+        ];
+    
+        if (isset($files['image']['tmp_name']) && $files['image']['error'] === UPLOAD_ERR_OK) {
+            $productImage = time() . "_" . basename($files['image']['name']);
+            $targetProductImage = $targetDir . $productImage;
+            if (move_uploaded_file($files['image']['tmp_name'], $targetProductImage)) {
+                if (file_exists($targetDir . $currentProduct['image'])) {
+                    unlink($targetDir . $currentProduct['image']);
+                }
+                $productData['image'] = $productImage;
+            } else {
+                throw new Exception("Failed to upload product image.");
+            }
+        }
+    
+        return $productData;
+    }
+    
+    private function handleVariantsUpdate($data, $files, $productId) {
+        $existingVariants = $this->productVariantModel->getDataProductVariantByProductId($productId);
         $targetDir = "uploads/products/";
     
-        // Lấy thông tin sản phẩm hiện tại
-        $currentProduct = $this->productModel->findIdTable($productId);
-    
-        // Kiểm tra xem có ảnh mới không
-        if (isset($files['image']['tmp_name']) && $files['image']['error'] === UPLOAD_ERR_OK) {
-            $productImage = $targetDir . basename($files['image']['name']);
-            if (move_uploaded_file($files['image']['tmp_name'], $productImage)) {
-                $productData = [
-                    'product_name' => $data['product_name'],
-                    'category_id' => $data['category_id'],
-                    'description' => $data['description'],
-                    'image' => $productImage
-                ];
-            } else {
-                echo "Failed to upload product image.";
-                return;
-            }
-        } else {
-            // Nếu không có ảnh mới, giữ nguyên ảnh cũ
-            $productData = [
-                'product_name' => $data['product_name'],
-                'category_id' => $data['category_id'],
-                'description' => $data['description'],
-                'image' => $currentProduct['image']
-            ];
-        }
-    
-        // Cập nhật thông tin sản phẩm
-        $this->productModel->updateIdTable($productData, $productId);
-    
-        // Lấy danh sách các biến thể hiện tại
-        $existingVariants = $this->productVariantModel->getDataProductVariantByProductId($productId);
-    
-        // Xoá các biến thể không còn tồn tại nữa
-        $existingVariantIds = array_column($existingVariants, 'id');
-        $currentVariantIds = array_column($data['variant'], 'variant_id');
-    
-        foreach ($existingVariants as $existingVariant) {
-            if (!in_array($existingVariant['id'], $currentVariantIds) && !$this->orderModel->hasVariant($existingVariant['id'])) {
-                // Xóa ảnh liên quan đến biến thể
-                $this->productVariantImageModel->removeIdTable($existingVariant['id']);
-                // Xóa biến thể
-                $this->productVariantModel->removeIdTable($existingVariant['id']);
-            }
-        }
-    
-        // Cập nhật và thêm mới biến thể sản phẩm
         foreach ($data['variant'] as $index => $variant) {
-            $variantId = $variant['variant_id'] ?? null;
             $variantData = [
+                'product_id' => $productId,
                 'color_id' => $variant['color'],
                 'size_id' => $variant['size'],
                 'stock' => $variant['stock'],
                 'price' => $variant['price']
             ];
     
-            if ($variantId) {
-                // Cập nhật biến thể hiện tại
-                $this->productVariantModel->updateIdTable($variantData, $variantId);
+            // Kiểm tra xem biến thể đã tồn tại chưa
+            $existingVariant = $this->findExistingVariant($existingVariants, $variantData);
+    
+            if ($existingVariant) {
+                $this->updateExistingVariant($existingVariant['id'], $variantData, $files, $index, $targetDir);
             } else {
-                // Thêm mới biến thể
-                $variantData['product_id'] = $productId;
-                $variantId = $this->productVariantModel->insertTable($variantData);
-            }
-    
-            // Xử lý ảnh cho biến thể
-            if (isset($files['variant']['tmp_name'][$index]['images'])) {
-                foreach ($files['variant']['tmp_name'][$index]['images'] as $key => $tmpName) {
-                    if ($files['variant']['error'][$index]['images'][$key] === UPLOAD_ERR_OK) {
-                        $imageName = $files['variant']['name'][$index]['images'][$key];
-                        $targetFile = $targetDir . basename($imageName);
-    
-                        if (move_uploaded_file($tmpName, $targetFile)) {
-                            $isPrimary = ($key === 0) ? 1 : 0;
-                            $imageData = [
-                                'product_variant_id' => $variantId,
-                                'image_url' => $targetFile,
-                                'is_primary' => $isPrimary
-                            ];
-                            $this->productVariantImageModel->insertTable($imageData);
-                        } else {
-                            echo "Failed to move uploaded file: " . $imageName;
-                            return;
-                        }
-                    } else {
-                        echo "File upload error: " . $files['variant']['error'][$index]['images'][$key];
-                        return;
-                    }
-                }
+                $this->addNewVariant($variantData, $files, $index, $targetDir);
             }
         }
+    }
+    private function findExistingVariant($existingVariants, $variantData) {
+        foreach ($existingVariants as $variant) {
+            if ($variant['product_id'] == $variantData['product_id'] &&
+                $variant['color_id'] == $variantData['color_id'] &&
+                $variant['size_id'] == $variantData['size_id']) {
+                return $variant;
+            }
+        }
+        return null;
+    }
+    private function updateExistingVariant($variantId, $variantData, $files, $index, $targetDir) {
+        $this->productVariantModel->updateIdTable($variantData, $variantId);
+        $currentVariantImages = $this->productVariantImageModel->getImageByProductVariantId($variantId);
     
-        // Redirect sau khi cập nhật thành công
-        $this->route->redirectAdmin('list-product');
-        echo "Product updated successfully!";
+        if (isset($files['variant']['tmp_name'][$index]['images'])) {
+            $this->handleVariantImages($variantId, $files['variant'], $index, $targetDir, $currentVariantImages);
+        }
+    }      
+    private function addNewVariant($variantData, $files, $index, $targetDir) {
+        $variantId = $this->productVariantModel->insertTable($variantData);
+    
+        if (isset($files['variant']['tmp_name'][$index]['images'])) {
+            $this->handleVariantImages($variantId, $files['variant'], $index, $targetDir);
+        }
     }
     
-    // public function update() {
-    //     $data = $_POST;
-    //     $files = $_FILES;
-    //     $productId = $data['product_id'];
-    //     $targetDir = "uploads/products/";
+    private function handleVariantImages($variantId, $files, $index, $targetDir, $currentImages = []) {
+        // Kiểm tra xem có ảnh mới được tải lên không
+        if (!isset($files['tmp_name'][$index]['images']) || empty($files['tmp_name'][$index]['images'][0])) {
+            return; // Không có ảnh mới, giữ nguyên ảnh cũ
+        }
     
-    //     // Lấy thông tin sản phẩm hiện tại
-    //     $currentProduct = $this->productModel->findIdTable($productId);
+        // Xóa tất cả ảnh hiện tại của biến thể này
+        foreach ($currentImages as $currentImage) {
+            $this->deleteVariantImage($currentImage['id'], $currentImage['image_url'], $targetDir);
+        }
     
-    //     // Kiểm tra xem có ảnh mới không
-    //     if (isset($files['image']['tmp_name']) && $files['image']['error'] === UPLOAD_ERR_OK) {
-    //         $productImage = $targetDir . basename($files['image']['name']);
-    //         if (move_uploaded_file($files['image']['tmp_name'], $productImage)) {
-    //             $productData = [
-    //                 'product_name' => $data['product_name'],
-    //                 'category_id' => $data['category_id'],
-    //                 'description' => $data['description'],
-    //                 'image' => $productImage
-    //             ];
-    //         } else {
-    //             echo "Failed to upload product image.";
-    //             return;
-    //         }
-    //     } else {
-    //         // Nếu không có ảnh mới, giữ nguyên ảnh cũ
-    //         $productData = [
-    //             'product_name' => $data['product_name'],
-    //             'category_id' => $data['category_id'],
-    //             'description' => $data['description'],
-    //             'image' => $currentProduct['image']
-    //         ];
-    //     }
+        // Tải lên và lưu các ảnh mới
+        foreach ($files['tmp_name'][$index]['images'] as $key => $tmpName) {
+            if (empty($tmpName)) continue;
     
-    //     // Cập nhật thông tin sản phẩm
-    //     $this->productModel->updateIdTable($productData, $productId);
+            if ($files['error'][$index]['images'][$key] === UPLOAD_ERR_OK) {
+                $imageName = $files['name'][$index]['images'][$key];                
+                $uploadImage = time() . "_" . basename($imageName);
+                $targetFile = $targetDir . $uploadImage;
+                if (move_uploaded_file($tmpName, $targetFile)) {
+                    $isPrimary = ($key === 0) ? 1 : 0;
+                    $imageData = [
+                        'product_variant_id' => $variantId,
+                        'image_url' => $uploadImage,
+                        // 'image_url' => $targetFile,
+                        'is_primary' => $isPrimary
+                    ];
     
-    //     // Lấy danh sách các biến thể hiện tại
-    //     $existingVariants = $this->productVariantModel->getDataProductVariantByProductId($productId);
-    
-    //     // Xoá các biến thể không còn tồn tại nữa
-    //     $existingVariantIds = array_column($existingVariants, 'id');
-    //     $currentVariantIds = array_column($data['variant'], 'variant_id');
-    
-    //     foreach ($existingVariants as $existingVariant) {
-    //         if (!in_array($existingVariant['id'], $currentVariantIds) && !$this->orderModel->hasVariant($existingVariant['id'])) {
-    //             $this->productVariantModel->removeIdTable($existingVariant['id']);
-    //             $this->productVariantImageModel->removeIdTable($existingVariant['id']);
-    //         }
-    //     }
-    
-    //     // Cập nhật và thêm mới biến thể sản phẩm
-    //     foreach ($data['variant'] as $index => $variant) {
-    //         $variantId = $variant['variant_id'] ?? null;
-    //         $variantData = [
-    //             'color_id' => $variant['color'],
-    //             'size_id' => $variant['size'],
-    //             'stock' => $variant['stock'],
-    //             'price' => $variant['price']
-    //         ];
-    
-    //         if ($variantId) {
-    //             // Cập nhật biến thể hiện tại
-    //             $this->productVariantModel->updateIdTable($variantData, $variantId);
-    //         } else {
-    //             // Thêm mới biến thể
-    //             $variantData['product_id'] = $productId;
-    //             $variantId = $this->productVariantModel->insertTable($variantData);
-    //         }
-    
-    //         // Xử lý ảnh cho biến thể
-    //         if (isset($files['variant']['tmp_name'][$index]['images'])) {
-    //             foreach ($files['variant']['tmp_name'][$index]['images'] as $key => $tmpName) {
-    //                 if ($files['variant']['error'][$index]['images'][$key] === UPLOAD_ERR_OK) {
-    //                     $imageName = $files['variant']['name'][$index]['images'][$key];
-    //                     $targetFile = $targetDir . basename($imageName);
-    
-    //                     if (move_uploaded_file($tmpName, $targetFile)) {
-    //                         $isPrimary = ($key === 0) ? 1 : 0;
-    //                         $imageData = [
-    //                             'product_variant_id' => $variantId,
-    //                             'image_url' => $targetFile,
-    //                             'is_primary' => $isPrimary
-    //                         ];
-    //                         $this->productVariantImageModel->insertTable($imageData);
-    //                     } else {
-    //                         echo "Failed to move uploaded file: " . $imageName;
-    //                         return;
-    //                     }
-    //                 } else {
-    //                     echo "File upload error: " . $files['variant']['error'][$index]['images'][$key];
-    //                     return;
-    //                 }
-    //             }
-    //         }
-    //     }
-    
-    //     // Redirect sau khi cập nhật thành công
-    //     $this->route->redirectAdmin('list-product');
-    //     echo "Product updated successfully!";
-    // }
-    
-    // public function update() {
-    //     $data = $_POST;
-    //     $files = $_FILES;
-    //     $productId = $data['product_id'];
-    //     $targetDir = "uploads/products/";
-    
-    //     // Lấy thông tin sản phẩm hiện tại
-    //     $currentProduct = $this->productModel->findIdTable($productId);
-    
-    //     // Kiểm tra xem có ảnh mới không
-    //     if (isset($files['image']['tmp_name']) && $files['image']['error'] === UPLOAD_ERR_OK) {
-    //         $productImage = $targetDir . basename($files['image']['name']);
-    //         if (move_uploaded_file($files['image']['tmp_name'], $productImage)) {
-    //             $productData = [
-    //                 'product_name' => $data['product_name'],
-    //                 'category_id' => $data['category_id'],
-    //                 'description' => $data['description'],
-    //                 'image' => $productImage
-    //             ];
-    //         } else {
-    //             echo "Failed to upload product image.";
-    //             return;
-    //         }
-    //     } else {
-    //         // Nếu không có ảnh mới, giữ nguyên ảnh cũ
-    //         $productData = [
-    //             'product_name' => $data['product_name'],
-    //             'category_id' => $data['category_id'],
-    //             'description' => $data['description'],
-    //             'image' => $currentProduct['image']
-    //         ];
-    //     }
-    
-    //     // Cập nhật thông tin sản phẩm
-    //     $this->productModel->updateIdTable($productData, $productId);
-    
-    //     // Xử lý các biến thể
-    //     $existingVariants = $this->productVariantModel->getDataProductVariantByProductId($productId);
-    
-    //     // Xoá các biến thể không còn tồn tại nữa
-    //     // $currentVariantIds = array_column($data['variant'], 'variant_id');
-    //     // foreach ($existingVariants as $existingVariant) {
-    //     //     if (!in_array($existingVariant['id'], $currentVariantIds) && !$this->orderDetailModel->hasVariant($existingVariant['id'])) {
-    //     //         $this->productVariantModel->deleteById($existingVariant['id']);
-    //     //         $this->productVariantImageModel->deleteByVariantId($existingVariant['id']);
-    //     //     }
-    //     // }
-    
-    //     // Cập nhật và thêm mới biến thể sản phẩm
-    //     foreach ($data['variant'] as $variant) {
-    //         $variantId = $variant['variant_id'] ?? null;
-    //         $variantData = [
-    //             'color_id' => $variant['color'],
-    //             'size_id' => $variant['size'],
-    //             'stock' => $variant['stock'],
-    //             'price' => $variant['price']
-    //         ];
-    
-    //         if ($variantId) {
-    //             // Cập nhật biến thể hiện tại
-    //             $this->productVariantModel->updateIdTable($variantData, $variantId);
-    //         } else {
-    //             // Thêm mới biến thể
-    //             $variantData['product_id'] = $productId;
-    //             $variantId = $this->productVariantModel->insertTable($variantData);
-    //         }
-    
-    //         // Xử lý ảnh cho biến thể
-    //         if (isset($files['variant']['tmp_name'][$variantId]['images'])) {
-    //             foreach ($files['variant']['tmp_name'][$variantId]['images'] as $key => $tmpName) {
-    //                 if ($files['variant']['error'][$variantId]['images'][$key] === UPLOAD_ERR_OK) {
-    //                     $imageName = $files['variant']['name'][$variantId]['images'][$key];
-    //                     $targetFile = $targetDir . basename($imageName);
-    
-    //                     if (move_uploaded_file($tmpName, $targetFile)) {
-    //                         $isPrimary = ($key === 0) ? 1 : 0;
-    //                         $imageData = [
-    //                             'product_variant_id' => $variantId,
-    //                             'image_url' => $targetFile,
-    //                             'is_primary' => $isPrimary
-    //                         ];
-    //                         $this->productVariantImageModel->insertTable($imageData);
-    //                     } else {
-    //                         echo "Failed to move uploaded file: " . $imageName;
-    //                         return;
-    //                     }
-    //                 } else {
-    //                     echo "File upload error: " . $files['variant']['error'][$variantId]['images'][$key];
-    //                     return;
-    //                 }
-    //             }
-    //         }
-    //     }
-    
-    //     // Redirect sau khi cập nhật thành công
-    //     $this->route->redirectAdmin('list-product');
-    //     echo "Product updated successfully!";
-    // }
+                    $this->productVariantImageModel->insertTable($imageData);
+                } else {
+                    throw new Exception("Không thể di chuyển file đã tải lên: " . $imageName);
+                }
+            } else if ($files['error'][$index]['images'][$key] !== UPLOAD_ERR_NO_FILE) {
+                throw new Exception("Lỗi tải file: " . $files['error'][$index]['images'][$key]);
+            }
+        }
+    }
+        
+    private function deleteVariantImage($imageId, $imageUrl, $targetDir ) {
+
+        if (file_exists($targetDir . $imageUrl)) {
+            unlink($targetDir . $imageUrl);
+        }
+        $this->productVariantImageModel->removeIdTable($imageId);
+    }
     
     // Debug dữ liệu POST và FILES
                 // echo "<pre>";
