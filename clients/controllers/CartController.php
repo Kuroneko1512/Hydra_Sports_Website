@@ -27,7 +27,7 @@
                     $dataOrder = [];  
                     // $dataOrder['order_status'] = 0;
                     $dataOrder['payment_status'] = 0;
-                    $dataOrder['order_status'] = 0;
+                    $dataOrder['order_status_id'] = 1;
                     $orderID = $orderModel->insertTable($dataOrder);
                     $_SESSION['order_id'] = $orderID;
                 }
@@ -39,21 +39,20 @@
                 $dataOrderDetail['price'] = (int)$variant['price'];
                 $orderDetailModel->insertTable($dataOrderDetail);
             }
-
-            $orders = $orderModel->allTable();
-            $order = $orders[0];
-
-            $orderDetails = $orderDetailModel->all_item($order['id']);
-
+            $orderDetails= [];
             $totalPrice = 0;
-
-            foreach ($orderDetails as $key => $value) {
-                $orderDetails[$key]['product_name'] = $productVariantModel->getProductName($value['product_variant_id']);
-                $orderDetails[$key]['product_image'] = $productImageModel->getImageByVariantID($value['product_variant_id']);
-
-                $totalPrice += (int)$value['price'] * (int)$value['quantity'];
+            if(isset($order['id'])){
+                $orderDetails = $orderDetailModel->all_item($order['id']);
+                foreach ($orderDetails as $key => $value) {
+                    $orderDetails[$key]['product_name'] = $productVariantModel->getProductName($value['product_variant_id']);
+                    $orderDetails[$key]['product_image'] = $productImageModel->getImageByVariantID($value['product_variant_id']);
+    
+                    $totalPrice += (int)$value['price'] * (int)$value['quantity'];
+                }
+    
             }
 
+           
             $data['orderDetails'] = $orderDetails;
             $data['totalPrice'] = $totalPrice;
 

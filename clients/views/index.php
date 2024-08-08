@@ -100,7 +100,7 @@
                 <a class="text-decoration-none" href="">
                     <div class="cat-item img-zoom d-flex align-items-center mb-4">
                         <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                            <img  class="img-fluid w-100" src="<?=BASE_URL?>/uploads/categories/<?= $category['image'] ?>" alt="">
+                            <img  class="img-fluid w-100" src="<?=BASE_URL?>/uploads/category/<?= $category['image'] ?>" alt="">
                         </div>
                         <div class="flex-fill pl-3">
                             <h6><?= $category['category_name'] ?></h6>
@@ -197,7 +197,7 @@
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href=""><?= $productRecent['product_name'] ?></a>
+                        <a class="h6 text-decoration-none text-truncate" href="<?= $route->getLocateClient('product_detail') ?>&id=<?= $productRecent['id'] ?>"><?= $productRecent['product_name'] ?></a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5>$<?= $productRecent['price'] ?></h5><h6 class="text-muted ml-2"><del>$0</del></h6>
                         </div>

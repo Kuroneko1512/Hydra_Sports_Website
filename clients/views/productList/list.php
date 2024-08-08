@@ -26,7 +26,7 @@
                     <div class="col-lg-3 col-md-6 col-sm-6 pb-1">
                     <div class="product-item bg-light mb-4">
                         <div class="product-img position-relative overflow-hidden">
-                        <img  class="img-fluid w-100" src="<?=BASE_URL?><?= $product['image_url'] ?>" alt="">
+                        <img  class="img-fluid w-100" src="<?=BASE_URL?>uploads/products/<?= $product['image_url'] ?>" alt="">
                             <div class="product-action">
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
