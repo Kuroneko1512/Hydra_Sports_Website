@@ -95,12 +95,12 @@
                         <span class="hide-menu">Orders</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item">
+                        <!-- <li class="sidebar-item">
                             <a href="form-basic.html" class="sidebar-link">
                                 <i class="mdi mdi-note-outline"></i>
                                 <span class="hide-menu"> Add </span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="sidebar-item">
                             <a href="<?= $route->getLocateAdmin('list-order') ?>" class="sidebar-link">
                                 <i class="mdi mdi-note-plus"></i>

@@ -11,8 +11,8 @@ match ($route->getAct()) {
     'product_detail' => (new ProductController())->detail(),
 
     'contact' => (new ContactController())->contact(),
-    'shoppingcart_cart' => (new ShoppingCartController())->cart(),
     'checkout' => (new CheckoutController())->checkout(),
+    'success' => (new CheckoutController())->success(),
 
     'cart' => (new CartController())->cart(),
 

@@ -20,21 +20,19 @@ class SessionController extends BaseController
                 $userModel = new User();
 
                 $user = $userModel->getUserByUsername($username);
-                // pp($user);
                 if ($user['password'] == md5($password)) {
-                    $_SESSION['user'] = $user;
+                    $_SESSION['user'] = ['id' => $user['id'], 'email' => $user['email'], 'username' => $user['username']];
                     $this->route->redirectClient();
                 }
             }
         }
 
         $this->viewApp->requestGuestView('session.login');
+        
     }
 
     public function logout() {
-
         session_destroy();
-        $this->viewApp->requestGuestView('session.login');
-        
+        $this->route->redirectClient('login');
     }
 }       

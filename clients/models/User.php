@@ -92,7 +92,7 @@
         public function getUserByUsername($username) {
             try {
                 global $coreApp;
-                $sql = "SELECT `username`, `password` FROM {$this->tableName} WHERE `username` = '{$username}'";
+                $sql = "SELECT * FROM {$this->tableName} WHERE `username` = '{$username}'";
 
                 $stmt = $this->conn->prepare($sql);
                 $stmt->execute();

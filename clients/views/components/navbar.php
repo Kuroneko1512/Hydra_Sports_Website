@@ -27,8 +27,8 @@
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
                         <a href="<?= $route->getLocateClient() ?>" class="nav-item nav-link">Home</a>
-                        <a href="<?= $route->getLocateClient('product') ?>" class="nav-item nav-link">Product </a>
-                        <a href="<?= $route->getLocateClient('product_detail') ?>" class="nav-item nav-link">Product Detail</a>
+                        <a href="<?= $route->getLocateClient('product') ?>" class="nav-item nav-link">Products </a>
+                        <!-- <a href="<?= $route->getLocateClient('product_detail') ?>" class="nav-item nav-link">Product Detail</a> -->
                         <!-- <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                             <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
@@ -38,14 +38,12 @@
                         </div> -->
                         <a href="<?php echo BASE_URL;?>?act=contact" class="nav-item nav-link">Contact</a>
                     </div>
+                    
+                    <!-- Hiển thị số lượng item có trong giỏ hàng -->
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                        <a href="" class="btn px-0">
-                            <i class="fas fa-heart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
-                        </a>
-                        <a href="" class="btn px-0 ml-3">
+                        <a href="<?= $route->getLocateClient('cart') ?>" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;"><?= $numberInCart;?></span>
                         </a>
                     </div>
                 </div>

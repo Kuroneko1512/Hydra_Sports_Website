@@ -80,7 +80,7 @@
                         <i class="fas fa-heart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                     </a>
-                    <a href="" class="btn px-0 ml-2">
+                    <a href="<?= $route->getLocateClient('cart') ?>" class="btn px-0 ml-2">
                         <i class="fas fa-shopping-cart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                     </a>
@@ -115,6 +115,10 @@
     <!-- Topbar End -->
 
 
-    <?php $viewApp->requestComponents('navbar'); ?>
+    <?php $viewApp->requestComponents('navbar'); ?> 
+      <!--   $this->viewApp->requestView('cart.cart', $data); thông thường gọi đến phương thức requestView hiển thị view 
+        Header gọi đến phương thức requestComponets => thay đổi trong view và controller của commons
+      -->
+
 
    
