@@ -4,6 +4,7 @@ class ProductVariant extends BaseModel
 {
     public $tableName = 'product_variant';
     public $id = 'id';
+    // Lấy ra tất cả biển thể sản phẩm theo id
     public function all_VR_Table($id) {
         try {
             global $coreApp;

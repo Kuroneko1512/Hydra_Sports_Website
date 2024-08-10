@@ -15,5 +15,8 @@ match ($route->getAct()) {
     'success' => (new CheckoutController())->success(),
 
     'cart' => (new CartController())->cart(),
-
+    'update-cart' => (new CartController())->cartUpdate(),
+    'delete-item-in-cart' => (new CartController())->deleteItem(),
+    
+    
 };

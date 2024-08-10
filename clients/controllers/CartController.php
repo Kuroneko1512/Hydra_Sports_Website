@@ -63,6 +63,26 @@
             $this->viewApp->requestView('cart.cart', $data);
         }
 
+        public function cartUpdate() 
+        {
+            $id = $_POST['id'];
+            $quantity = $_POST['quantity'];
+
+            $orderDetailModel= new OrderDetail();
+            $dataOrderDetail = [];  
+            $dataOrderDetail['quantity'] = $quantity;
+            $orderDetailModel->updateIdTable($dataOrderDetail, $id);
+
+            return true;
+        }
+
+        public function deleteItem() 
+        {
+            $id = $_POST['id'];
+            $orderDetailModel= new OrderDetail();
+            $orderDetailModel->removeIdTable($id);
+            return true;
+        }
         
     }
 ?>

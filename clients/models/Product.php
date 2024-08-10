@@ -4,7 +4,7 @@ class Product extends BaseModel
 {
     public $tableName = 'product';
     public $id = 'id';
-
+     // Lấy ra tất cả sản phẩm theo category, giới hạn,  offset bỏ đi bao nhiêu phần tử 
     public function getProducts($cat, $limit, $offset = 0) {
         try {
             global $coreApp;
@@ -25,7 +25,8 @@ class Product extends BaseModel
             $coreApp->debug($e);
         }
     }
-
+    
+    // Hiển thị số sản phẩm gần đây nhất
     public function getProductRecent($limit, $offset = 0) {
         try {
             global $coreApp;
@@ -39,10 +40,10 @@ class Product extends BaseModel
         }
     }
 
-    public function countProducts($cat) { // Đếm tổng số sản phẩm
+    // Đếm tổng số sản phẩm
+    public function countProducts($cat) { 
         try {
             global $coreApp;
-            // $sql = "SELECT * FROM {$this->tableName} ORDER BY {$this->id} DESC";
             $sql = "SELECT COUNT(id) AS NumberOfProducts FROM `{$this->tableName}` ";
 
             if (!empty($cat)) {

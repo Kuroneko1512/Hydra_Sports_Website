@@ -21,8 +21,8 @@
             $productVariants=$productVariantModel->all_VR_Table($value['id']);
             $productImages = $productImageModel->all_Image_Table($value['id']);
 
-            $products[$key]['price'] = isset($productVariants[0]['price']) ? $productVariants[0]['price'] : 0;
-            $products[$key]['image_url'] = isset($productImages[0]['image_url']) ? $productImages[0]['image_url'] : '';
+            $products[$key]['price'] = isset($productVariants[0]['price']) ? $productVariants[0]['price'] : 0; // Hiển thị giá tiền theo biến thể của thằng đầu tiên
+            $products[$key]['image_url'] = isset($productImages[0]['image_url']) ? $productImages[0]['image_url'] : ''; // Hiển thị ảnh theo biến thể của thằng đầu tiên
         }
         foreach ($productsRecent as $key => $value) {
             

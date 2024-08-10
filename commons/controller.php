@@ -16,7 +16,11 @@ abstract class BaseController {
 
         // get number in cart
         $orderModel = new Order();
-        $numberInCart = $orderModel->getNumberInCart($_SESSION['user']['id']);
+
+        $numberInCart = 0;
+        if (isset($_SESSION['user']['id']) && !$route->isAdminPage) {
+            $numberInCart = $orderModel->getNumberInCart($_SESSION['user']['id']);
+        }
 
         $this->viewApp->categories = $categories;
         $this->viewApp->numberInCart = $numberInCart;
