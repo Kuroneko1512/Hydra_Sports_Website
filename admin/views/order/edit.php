@@ -51,7 +51,7 @@
                         <option value="">--Select--</option>
                         <?php foreach ($orderStatus as $st) : ?>
                             <option value="<?= $st['id'] ?>" <?= $order['order_status_id'] == $st['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($st['status_name']) ?>
+                                <?= htmlspecialchars($st['status_name']) ?> <!-- -->
                             </option>
                         <?php endforeach; ?>
                     </select>

@@ -19,6 +19,10 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+<style>
+.error-ng{color:red;}
+    </style>
 </head>
 
 <body>
@@ -52,15 +56,19 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-success text-white" id="basic-addon1"><i class="ti-user"></i></span>
                                     </div>
-                                    <input name="username" type="text" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required>
+                                    <input name="username" type="text"  value="<?= isset($_POST['username']) ? $_POST['username'] : ''; ?>" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required>
                                 </div>
+                                <div class="error-ng"><?= isset($errors['username']) ? $errors['username'] : ''; ?></div>
+
                                 <!-- email -->
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-danger text-white" id="basic-addon1"><i class="ti-email"></i></span>
                                     </div>
-                                    <input name="email" type="text" class="form-control form-control-lg" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1" required>
+                                    <input name="email" type="text"  value="<?= isset($_POST['email']) ? $_POST['email'] : ''; ?>" class="form-control form-control-lg" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1" required>
                                 </div>
+                                <div class="error-ng"><?= isset($errors['email']) ? $errors['email'] : ''; ?></div>
+
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-warning text-white" id="basic-addon2"><i class="ti-pencil"></i></span>
@@ -73,6 +81,7 @@
                                     </div>
                                     <input name="confirm_password" type="password" class="form-control form-control-lg" placeholder=" Confirm Password" aria-label="Password" aria-describedby="basic-addon1" required>
                                 </div>
+                                <div class="error-ng" role="alert"><?= isset($errors['confirm_password']) ? $errors['confirm_password'] : ''; ?></div>
                             </div>
                         </div>
                         <div class="row border-top border-secondary">

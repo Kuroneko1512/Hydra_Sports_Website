@@ -42,7 +42,7 @@
             <div class="auth-box bg-dark border-top border-secondary">
                 <div id="loginform">
                     <div class="text-center p-t-20 p-b-20">
-                        <span class="db"><img src="lib/admin/assets/images/logo.png" alt="logo" /></span>
+                        <a href="<?=BASE_URL?>"><span class="db"><img src="lib/admin/assets/images/logo.png" alt="logo" /></span></a>
                     </div>
                     <!-- Form -->
                     <form class="form-horizontal m-t-20" id="loginform" action="" method="post">

@@ -30,6 +30,7 @@
                 $stmt = $this->conn->prepare($sql);
                 $stmt->execute();
                 $result = $stmt->fetch();
+                // pp($sql);
 
                 return $result['num_of_item'];
             } catch (Exception $e) {

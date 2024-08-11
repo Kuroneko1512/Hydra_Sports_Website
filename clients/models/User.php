@@ -104,4 +104,19 @@
             }
         }
 
+        public function getUserByEmail($email) {
+            try {
+                global $coreApp;
+                $sql = "SELECT * FROM {$this->tableName} WHERE `email` = '{$email}'";
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                return $result;
+            } catch (Exception $e) {
+                $coreApp->debug($e);
+                return false;
+            }
+        }
+
     }

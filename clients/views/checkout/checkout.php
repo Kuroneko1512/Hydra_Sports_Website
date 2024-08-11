@@ -8,11 +8,13 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>First Name</label>
-                            <input class="form-control" type="text" name="firstName">
+                            <input class="form-control" type="text" name="firstName" value="<?= isset($_POST['firstName']) ? $_POST['firstName'] : ''; ?>">
+                            <div class="error-ng"><?= isset($errors['firstName']) ? $errors['firstName'] : ''; ?></div>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Last Name</label>
-                            <input class="form-control" type="text" name="lastName">
+                            <input class="form-control" type="text" name="lastName" value="<?= isset($_POST['lastName']) ? $_POST['lastName'] : ''; ?>">
+                            <div class="error-ng"><?= isset($errors['lastName']) ? $errors['lastName'] : ''; ?></div>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>E-mail</label>
@@ -20,11 +22,13 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Mobile No</label>
-                            <input class="form-control" type="text" name="customer_phone">
+                            <input class="form-control" type="text" name="customer_phone" value="<?= isset($_POST['customer_phone']) ? $_POST['customer_phone'] : ''; ?>">
+                            <div class="error-ng"><?= isset($errors['customer_phone']) ? $errors['customer_phone'] : ''; ?></div>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Address</label>
-                            <input class="form-control" type="text" name="shipping_address">
+                            <input class="form-control" type="text" name="shipping_address" value="<?= isset($_POST['shipping_address']) ? $_POST['shipping_address'] : ''; ?>">
+                            <div class="error-ng"><?= isset($errors['shipping_address']) ? $errors['shipping_address'] : ''; ?></div>
                         </div>
                     </div>
                 </div>
@@ -63,13 +67,13 @@
                     <div class="bg-light p-30">
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="directcheck" value="1">
+                                <input type="radio" class="custom-control-input" name="payment" id="directcheck" value="1" <?= !isset($_POST['payment']) || $_POST['payment'] == 1 ? 'checked' : ''; ?>>
                                 <label class="custom-control-label" for="directcheck">Direct Check</label>
                             </div>
                         </div>
                         <div class="form-group mb-4">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer" value="2">
+                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer" value="2" <?= isset($_POST['payment']) && $_POST['payment'] == 2 ? 'checked' : '';?> >
                                 <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
                             </div>
                         </div>

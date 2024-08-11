@@ -2,8 +2,8 @@
 class BaseView {
     public $title = '';
     //
-    public $categories = [];
-    public $numberInCart = 0;
+    public $categories = []; 
+    public $numberInCart = 0;//
     public function requestComponents($name, $data = []) {
         global $route;
         global $viewApp;
