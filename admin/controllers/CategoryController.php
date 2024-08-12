@@ -42,9 +42,13 @@ class CategoryController extends BaseController
                 $errors[$field] = ucfirst($field) . " không được để trống!!";
             }
         }
+        if ((!$isEdit && empty($data->image)) || ($isEdit && !isset($data->image))) {
+            $errors['image'] = "Ảnh danh mục là bắt buộc";
+        }
 
         // Lấy dữ liệu hiện có từ database
-        $categoryTable = $this->categoryModel->getCategoryName();
+        // $categoryTable = $this->categoryModel->getCategoryName();
+        $categoryTable = array_map('strtolower', $this->categoryModel->getCategoryName());
 
         // Kiểm tra tính duy nhất của category_name
         if (!$isEdit) {
@@ -58,15 +62,18 @@ class CategoryController extends BaseController
 
     // Kiểm tra tính duy nhất cho form tạo mới
     private function checkUniqueness($data, &$errors, $categoryTable) {
-        if (in_array($data->category_name, $categoryTable)) {
+        // if (in_array($data->category_name, $categoryTable)) {
+        if (in_array(strtolower($data->category_name), $categoryTable)) {
             $errors['category_name'] = "Tên danh mục đã được sử dụng";
         }
     }
 
     // Kiểm tra tính duy nhất cho form chỉnh sửa
     private function checkUniquenessForEdit($data, &$errors, $categoryTable) {
-        $currentCategoryName = $this->categoryModel->getCategoryNameById($data->id);
-        if ($data->category_name !== $currentCategoryName && in_array($data->category_name, $categoryTable)) {
+        // $currentCategoryName = $this->categoryModel->getCategoryNameById($data->id);
+        // if ($data->category_name !== $currentCategoryName && in_array($data->category_name, $categoryTable)) {
+        $currentCategoryName = strtolower($this->categoryModel->getCategoryNameById($data->id));
+        if (strtolower($data->category_name) !== $currentCategoryName && in_array(strtolower($data->category_name), $categoryTable)) {
             $errors['category_name'] = "Tên danh mục đã được sử dụng";
         }
     }

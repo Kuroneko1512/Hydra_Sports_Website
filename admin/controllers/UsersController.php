@@ -166,7 +166,8 @@
             }
 
             // Lấy dữ liệu hiện có từ database
-            $usernameTable = $this->userModel->getUserName();
+            // $usernameTable = $this->userModel->getUserName();
+            $usernameTable = array_map('strtolower', $this->userModel->getUserName());
             $emailTable = $this->userModel->getEmails();
             $phoneTable = $this->userModel->getPhones();
 
@@ -202,12 +203,18 @@
                 $errors['username'] = "Username phải có ít nhất 4 ký tự";
             }
 
+            // Kiểm tra trường ảnh
+            if ((!$isEdit && empty($data->avatar)) || ($isEdit && !isset($data->avatar))) {
+                $errors['avatar'] = "Ảnh đại diện là bắt buộc";
+            }
+
             return $errors;
         }
 
         // Kiểm tra tính duy nhất cho form tạo mới
         private function checkUniqueness($data, &$errors, $usernameTable, $emailTable, $phoneTable) {
-            if (in_array($data->username, $usernameTable)) {
+            // if (in_array($data->username, $usernameTable)) {
+            if (in_array(strtolower($data->username), $usernameTable)) {
                 $errors['username'] = "Tên đã được sử dụng";
             }
             if (in_array($data->email, $emailTable)) {
@@ -220,11 +227,13 @@
 
         // Kiểm tra tính duy nhất cho form chỉnh sửa
         private function checkUniquenessForEdit($data, &$errors, $usernameTable, $emailTable, $phoneTable) {
-            $currentUsername = $this->userModel->getUsernameById($data->id);
+            // $currentUsername = $this->userModel->getUsernameById($data->id);
+            $currentUsername = strtolower($this->userModel->getUsernameById($data->id));
             $currentEmail = $this->userModel->getEmailById($data->id);
             $currentPhone = $this->userModel->getPhoneById($data->id);
 
-            if ($data->username !== $currentUsername && in_array($data->username, $usernameTable)) {
+            // if ($data->username !== $currentUsername && in_array($data->username, $usernameTable)) {
+            if (strtolower($data->username) !== $currentUsername && in_array(strtolower($data->username), $usernameTable)) {
                 $errors['username'] = "Tên đã được sử dụng";
             }
             if ($data->email !== $currentEmail && in_array($data->email, $emailTable)) {

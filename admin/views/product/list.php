@@ -97,9 +97,16 @@
                                     <a href="<?= $route->getLocateAdmin('edit-product') ?>&id=<?= $product['id'] ?>">
                                         <button type="button" class="btn btn-cyan btn-sm">Edit</button>
                                     </a>
-                                    <a href="<?= $route->getLocateAdmin('') ?>&id=<?= $product['id'] ?>" onclick="return confirm ('Bạn có muốn xóa không')" >
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </a>
+                                    <?php if ($user['status'] != 0): ?>
+                                        <a href="<?= $route->getLocateAdmin('delete-product') ?>&id=<?= $product['id'] ?>" onclick="return confirm ('Bạn có muốn xóa không')" >
+                                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="<?= $route->getLocateAdmin('restore-product') ?>&id=<?= $product['id'] ?>" onclick="return confirm ('Bạn có muốn xóa không')" >
+                                            <button type="button" class="btn btn-danger btn-sm">Restore</button>
+                                        </a>
+                                    <?php endif; ?>
+                                    
                                 </td>
                             </tr>
 

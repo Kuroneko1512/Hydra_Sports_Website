@@ -62,6 +62,8 @@
             var validateEditColorUrl = '<?= $route->getLocateAdmin("validate-edit-color-data") ?>';
             var validateSizeUrl = '<?= $route->getLocateAdmin("validate-size-data") ?>';
             var validateEditSizeUrl = '<?= $route->getLocateAdmin("validate-edit-size-data") ?>';
+            var validateProductDataUrl = '<?= $route->getLocateAdmin("validate-product-data") ?>';
+            var validateEditProductDataUrl = '<?= $route->getLocateAdmin("validate-edit-product-data") ?>';
             
         </script>
         <script src="lib/admin/dist/js/debounce-validate-form.js"></script>

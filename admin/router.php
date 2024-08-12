@@ -31,10 +31,14 @@ match ($route->getAct()) {
     // Product
     'list-product' => (new ProductController())->list(),
     'get-product-variant' => (new ProductController())->getProductVariant(),
+    'delete-product' => (new ProductController())->softDelete(),
+    'restore-product' => (new ProductController())->restore(),
     'create-product' => (new ProductController())->create(),
     'post-create-product' => (new ProductController())->store(),
     'edit-product'=> (new ProductController())->edit(),
     'post-edit-product' => (new ProductController()) -> update(),
+    'validate-product-data' => (new ProductController())->validateProductData(),
+    'validate-edit-product-data' => (new ProductController())->validateEditProductData(),
     // Product Variant
 
     //Variant

@@ -175,11 +175,12 @@ class ProductController extends BaseController {
         $categories = $this->categoryModel->allTable();
         $colors = $this->color->allTable();
         $sizes = $this->size->allTable();
-        
+        $errors = [];
         $data = [
             'categories' => $categories,
             'colors' => $colors,
-            'sizes' => $sizes
+            'sizes' => $sizes,
+            'errors' => $errors,
         ];
         
         // Hiển thị view để tạo sản phẩm mới
@@ -283,7 +284,16 @@ class ProductController extends BaseController {
             echo "File upload error: " . $files['image']['error'];
         }
     }
-    
+    public function softDelete(){
+        $id = $id = $this->route->getId();
+        $this->productModel->updateStatusIdTableAndRelated($id, 'product', [], 0);
+        $this->route->redirectAdmin('list-product');
+    }
+    public function restore() {
+        $id = $id = $this->route->getId();
+        $this->productModel->updateStatusIdTableAndRelated($id, 'product', [], 1);
+        $this->route->redirectAdmin('list-product');
+    }
     public function edit() {
         $id = $id = $this->route->getId();
         // Lấy thông tin sản phẩm theo id
@@ -299,13 +309,14 @@ class ProductController extends BaseController {
         foreach ($variants as &$variant) {
             $variant['images'] = $this->productVariantImageModel->getImageByProductVariantId($variant['id']);
         }
-        
+        $errors = [];
         $data = [
             'product' => $product,
             'categories' => $categories,
             'colors' => $colors,
             'sizes' => $sizes,
-            'variants' => $variants
+            'variants' => $variants,
+            'errors' => $errors
         ];
         
         // Hiển thị view để chỉnh sửa sản phẩm
@@ -456,7 +467,142 @@ class ProductController extends BaseController {
         }
         $this->productVariantImageModel->removeIdTable($imageId);
     }
-    
+    private function validateProductDataInternal($data, $isEdit = false) {
+        $errors = [];
+        
+        // Chuyển đổi $data thành array nếu nó là object
+        // $data = (array)$data;
+
+        // Kiểm tra tên sản phẩm
+        if (empty($data['product_name'])) {
+            $errors['product_name'] = "Tên sản phẩm không được để trống";
+        }
+
+        // Kiểm tra danh mục
+        if (empty($data['category_id'])) {
+            $errors['category_id'] = "Danh mục không được để trống";
+        }
+
+        // Kiểm tra mô tả
+        if (empty($data['description'])) {
+            $errors['description'] = "Mô tả không được để trống";
+        }
+
+        // Kiểm tra ảnh sản phẩm
+        if ((!$isEdit && empty($data['image'])) || ($isEdit && !isset($data['image']) && empty($data['image']))) {
+            $errors['image'] = "Ảnh sản phẩm là bắt buộc";
+        }
+
+        // Lấy dữ liệu hiện có từ db
+        $productTable = $this->productModel->getProductNameAndCategoryId();
+        
+        // Kiểm tra tính duy nhất của product_name và category_id
+        if (!$isEdit) {
+            $this->checkUniquenessProduct($data, $errors, $productTable);
+        } 
+        else {
+            $this->checkUniquenessForEditProduct($data, $errors, $productTable);
+        }
+
+
+        // Kiểm tra biến thể
+        if (!isset($data['is_simple']) || !$data['is_simple']) {
+            if (!isset($data['variant']) || !is_array($data['variant']) || count($data['variant']) == 0) {
+                $errors['variant'] = "Cần ít nhất một biến thể cho sản phẩm không đơn giản";
+            } else {
+                foreach ($data['variant'] as $index => $variant) {
+                    // $variant = (array)$variant; // Chuyển đổi thành array nếu là object
+                    if (!is_array($variant)) {
+                        $variant = (array)$variant;
+                    }
+
+                    if (empty($variant['color'])) {
+                        $errors["variant.{$index}.color"] = "Màu sắc không được để trống";
+                    }
+                    if (empty($variant['size'])) {
+                        $errors["variant.{$index}.size"] = "Kích thước không được để trống";
+                    }
+                    if (!isset($variant['stock']) || $variant['stock'] === '') {
+                        $errors["variant.{$index}.stock"] = "Số lượng tồn kho không được để trống";
+                    } elseif (!is_numeric($variant['stock']) || $variant['stock'] < 0) {
+                        $errors["variant.{$index}.stock"] = "Số lượng tồn kho phải là số không âm";
+                    }
+                    if (!isset($variant['price']) || $variant['price'] === '') {
+                        $errors["variant.{$index}.price"] = "Giá không được để trống";
+                    } elseif (!is_numeric($variant['price']) || $variant['price'] < 0) {
+                        $errors["variant.{$index}.price"] = "Giá phải là số không âm";
+                    }
+                    // if (!$isEdit && empty($variant['images'])) {
+                    //     $errors["variant.{$index}.images"] = "Ảnh biến thể là bắt buộc";
+                    // }
+                    if (!$isEdit && (empty($variant['images']) || !is_array($variant['images']) || count($variant['images']) === 0)) {
+                        $errors["variant.{$index}.images"] = "Ảnh biến thể là bắt buộc";
+                    }
+                    
+                }
+            }
+        }
+        error_log("Validating product data: " . json_encode($data));
+        if (isset($data['variant'])) {
+            foreach ($data['variant'] as $index => $variant) {
+                error_log("Validating variant $index: " . json_encode($variant));
+                if (!isset($variant['images']) || empty($variant['images'])) {
+                    error_log("Missing images for variant $index");
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+    private function checkUniquenessProduct($data, &$errors, $productTable) {
+        $nameValue = strtolower($data['product_name']);
+        $categoryId = $data['category_id'];
+        foreach ($productTable as $product) {
+            if (strtolower($product['product_name']) === $nameValue && $product['category_id'] == $categoryId) {
+                $errors['product_name'] = "Tên sản phẩm đã được sử dụng trong danh mục này";
+                break;
+            }
+        }
+    }
+
+    private function checkUniquenessForEditProduct($data, &$errors, $productTable) {
+        $nameValue = strtolower($data['product_name']);
+        $categoryId = $data['category_id'];
+        // $currentProduct = $this->productModel->getProductNameAndCategoryIdById($data['id']);
+        
+        foreach ($productTable as $product) {
+            if (strtolower($product['product_name']) === $nameValue && $product['category_id'] == $categoryId && $product['id'] != $data['product_id']) {
+                $errors['product_name'] = "Tên sản phẩm đã được sử dụng trong danh mục này";
+                break;
+            }
+        }
+    }
+    private function handleValidationProductAndVariant($isEdit) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+        error_log("Raw POST data: " . file_get_contents('php://input'));
+        error_log("Parsed POST data: " . json_encode($_POST));
+        error_log("Files data: " . json_encode($_FILES));
+        
+            // $data = json_decode(file_get_contents('php://input'));
+            $data = json_decode(file_get_contents('php://input'), true);
+            $errors = $this->validateProductDataInternal($data, $isEdit);
+            header('Content-Type: application/json');
+            echo json_encode($errors);
+            exit;
+        }
+    }
+    public function validateProductData() {
+        $this->handleValidationProductAndVariant(false);
+    }
+
+    public function validateEditProductData() {
+        $this->handleValidationProductAndVariant(true);
+    }
+
+
+
     // Debug dữ liệu POST và FILES
                 // echo "<pre>";
                 // print_r($data);

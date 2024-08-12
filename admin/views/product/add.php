@@ -37,14 +37,19 @@
     <!-- ============================================================== -->
     <div class="row">
         <div class="col-12 border border-info rounded shadow-lg p-3 mb-5 bg-white ">
-            <form class="form-horizontal" method="post" action="<?= $route->getLocateAdmin('post-create-product') ?>" enctype="multipart/form-data">
+            <form class="form-horizontal" id="createProductForm" method="post" action="<?= $route->getLocateAdmin('post-create-product') ?>" enctype="multipart/form-data">
 
                 <h4 class="card-title">Product Add</h4>
 
                 <div class="mb-3">
                     <label for="product_name">Product Name</label>
                     <input type="text" name="product_name" id="product_name" class="form-control" value="<?= isset($_POST['product_name']) ? htmlspecialchars($_POST['product_name']) : '' ?>">
-                    <p class="error"> <?php if (isset($errors['product_name'])) echo $errors['product_name']; ?></p>
+                    
+                    <span id="product_name-error" class="error-message text-danger">
+                        <?php if (isset($errors['product_name'])) : ?>
+                            <?= $errors['product_name'] ?>
+                        <?php endif; ?>
+                    </span>
                 </div>
 
                 <div class="mb-3">
@@ -57,25 +62,45 @@
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <p class="error"> <?php if (isset($errors['category_id'])) echo $errors['category_id']; ?></p>
+
+                    <span id="category_id-error" class="error-message text-danger">
+                        <?php if (isset($errors['category_id'])) : ?>
+                            <?= $errors['category_id'] ?>
+                        <?php endif; ?>
+                    </span>
                 </div>
 
                 <div class="mb-3">
                     <label for="description">Description</label>
                     <input type="text" name="description" id="description" class="form-control" value="<?= isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '' ?>">
-                    <p class="error"> <?php if (isset($errors['description'])) echo $errors['description']; ?></p>
+                    
+                    <span id="description-error" class="error-message text-danger">
+                        <?php if (isset($errors['description'])) : ?>
+                            <?= $errors['description'] ?>
+                        <?php endif; ?>
+                    </span>
                 </div>
 
                 <div class="mb-3">
                     <label for="image">Product Image</label>
                     <input type="file" name="image" id="image" class="form-control" accept="image/*">
-                    <p class="error"> <?php if (isset($errors['image'])) echo $errors['image']; ?></p>
+
+                    <span id="image-error" class="error-message text-danger">
+                        <?php if (isset($errors['image'])) : ?>
+                            <?= $errors['image'] ?>
+                        <?php endif; ?>
+                    </span>
                 </div>
 
                 <div class="mb-3">
                     <label for="is_simple">Is Simple Product</label>
                     <input type="checkbox" id="is_simple" name="is_simple" <?= isset($_POST['is_simple']) && $_POST['is_simple'] ? 'checked' : '' ?>>
-                    <p class="error"> <?php if (isset($errors['is_simple'])) echo $errors['is_simple']; ?></p>
+
+                    <span id="is_simple-error" class="error-message text-danger">
+                        <?php if (isset($errors['is_simple'])) : ?>
+                            <?= $errors['is_simple'] ?>
+                        <?php endif; ?>
+                    </span>
                 </div>
 
                 <div class="mb-3" id="variants-section" style="<?= isset($_POST['is_simple']) && $_POST['is_simple'] ? 'display:block;' : '' ?>">
@@ -92,46 +117,71 @@
                             </tr>
                         </thead>
                         <tbody id="variants-body">
-                            <?php
-                            $is_simple = isset($_POST['is_simple']) ? (bool)$_POST['is_simple'] : false;
-                            $variantCount = $is_simple ? 1 : (isset($_POST['variant']) ? count($_POST['variant']) : 1);
-                            for ($i = 0; $i < $variantCount; $i++) :
-                            ?>
-                                <tr>
-                                    <td>
-                                        <select name="variant[<?= $i ?>][color]" class="form-control">
-                                            <option value="">--Select--</option>
-                                            <?php foreach ($colors as $color) : ?>
-                                                <option value="<?= $color['id'] ?>" <?= isset($_POST['variant'][$i]['color']) && $_POST['variant'][$i]['color'] == $color['id'] ? 'selected' : '' ?>>
-                                                    <?= htmlspecialchars($color['color_name']) ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select name="variant[<?= $i ?>][size]" class="form-control">
-                                            <option value="">--Select--</option>
-                                            <?php foreach ($sizes as $size) : ?>
-                                                <option value="<?= $size['id'] ?>" <?= isset($_POST['variant'][$i]['size']) && $_POST['variant'][$i]['size'] == $size['id'] ? 'selected' : '' ?>>
-                                                    <?= htmlspecialchars($size['size_name']) ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="variant[<?= $i ?>][stock]" class="form-control" value="<?= isset($_POST['variant'][$i]['stock']) ? htmlspecialchars($_POST['variant'][$i]['stock']) : '' ?>">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="variant[<?= $i ?>][price]" class="form-control" value="<?= isset($_POST['variant'][$i]['price']) ? htmlspecialchars($_POST['variant'][$i]['price']) : '' ?>">
-                                    </td>
-                                    <td>
-                                        <input type="file" name="variant[<?= $i ?>][images][]" class="form-control" multiple accept="image/*">
-                                    </td>
-                                    <td>
-                                        <?php if (!$is_simple || $i > 0) : ?>
-                                            <button type="button" class="btn btn-danger btn-sm remove-variant">Remove</button>
+                        <?php
+                        $is_simple = isset($_POST['is_simple']) ? (bool)$_POST['is_simple'] : false;
+                        $variantCount = $is_simple ? 1 : (isset($_POST['variant']) ? count($_POST['variant']) : 1);
+                        for ($i = 0; $i < $variantCount; $i++) :
+                        ?>
+                            <tr>
+                                <td>
+                                    <select name="variant[<?= $i ?>][color]" class="form-control">
+                                        <option value="">--Select--</option>
+                                        <?php foreach ($colors as $color) : ?>
+                                            <option value="<?= $color['id'] ?>" <?= isset($_POST['variant'][$i]['color']) && $_POST['variant'][$i]['color'] == $color['id'] ? 'selected' : '' ?>>
+                                                <?= htmlspecialchars($color['color_name']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <span id="variant-<?= $i ?>-color-error" class="error-message text-danger">
+                                        <?php if (isset($errors["variant.{$i}.color"])) : ?>
+                                            <?= $errors["variant.{$i}.color"] ?>
                                         <?php endif; ?>
-                                    </td>
+                                    </span>
+                                </td>
+                                <td>
+                                    <select name="variant[<?= $i ?>][size]" class="form-control">
+                                        <option value="">--Select--</option>
+                                        <?php foreach ($sizes as $size) : ?>
+                                            <option value="<?= $size['id'] ?>" <?= isset($_POST['variant'][$i]['size']) && $_POST['variant'][$i]['size'] == $size['id'] ? 'selected' : '' ?>>
+                                                <?= htmlspecialchars($size['size_name']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <span id="variant-<?= $i ?>-size-error" class="error-message text-danger">
+                                        <?php if (isset($errors["variant.{$i}.size"])) : ?>
+                                            <?= $errors["variant.{$i}.size"] ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <input type="text" name="variant[<?= $i ?>][stock]" class="form-control" value="<?= isset($_POST['variant'][$i]['stock']) ? htmlspecialchars($_POST['variant'][$i]['stock']) : '' ?>">
+                                    <span id="variant-<?= $i ?>-stock-error" class="error-message text-danger">
+                                        <?php if (isset($errors["variant.{$i}.stock"])) : ?>
+                                            <?= $errors["variant.{$i}.stock"] ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <input type="text" name="variant[<?= $i ?>][price]" class="form-control" value="<?= isset($_POST['variant'][$i]['price']) ? htmlspecialchars($_POST['variant'][$i]['price']) : '' ?>">
+                                    <span id="variant-<?= $i ?>-price-error" class="error-message text-danger">
+                                        <?php if (isset($errors["variant.{$i}.price"])) : ?>
+                                            <?= $errors["variant.{$i}.price"] ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <input type="file" name="variant[<?= $i ?>][images][]" class="form-control" multiple accept="image/*">
+                                    <span id="variant-<?= $i ?>-images-error" class="error-message text-danger">
+                                        <?php if (isset($errors["variant.{$i}.images"])) : ?>
+                                            <?= $errors["variant.{$i}.images"] ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <?php if (!$is_simple || $i > 0) : ?>
+                                        <button type="button" class="btn btn-danger btn-sm remove-variant">Remove</button>
+                                    <?php endif; ?>
+                                </td>
                                 </tr>
                             <?php endfor; ?>
                         </tbody>
@@ -144,6 +194,74 @@
             </form>
 
             <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var isSimpleCheckbox = document.getElementById('is_simple');
+                    var variantsSection = document.getElementById('variants-section');
+                    var addVariantButton = document.getElementById('add-variant');
+                    var variantsBody = document.getElementById('variants-body');
+                
+                    
+                });
+                // Hàm cập nhật các tùy chọn variant
+                function updateVariantOptions() {
+                    const rows = document.querySelectorAll('#variants-body tr');
+                    const usedCombinations = new Set();
+
+                    rows.forEach(row => {
+                        const color = row.querySelector('select[name$="[color]"]').value;
+                        const size = row.querySelector('select[name$="[size]"]').value;
+                        if (color && size) {
+                            usedCombinations.add(`${color}-${size}`);
+                        }
+                    });
+
+                    rows.forEach(row => {
+                        const colorSelect = row.querySelector('select[name$="[color]"]');
+                        const sizeSelect = row.querySelector('select[name$="[size]"]');
+
+                        colorSelect.querySelectorAll('option').forEach(option => {
+                            option.disabled = false;
+                            option.classList.remove('text-muted', 'font-weight-bold', 'bg-light');
+                        });
+                        sizeSelect.querySelectorAll('option').forEach(option => {
+                            option.disabled = false;
+                            option.classList.remove('text-muted', 'font-weight-bold', 'bg-light');
+                        });
+
+                        if (colorSelect.value) {
+                            colorSelect.querySelector(`option[value="${colorSelect.value}"]`).classList.add('font-weight-bold', 'bg-light');
+                            sizeSelect.querySelectorAll('option').forEach(option => {
+                                if (option.value && usedCombinations.has(`${colorSelect.value}-${option.value}`)) {
+                                    option.disabled = true;
+                                    option.classList.add('text-muted');
+                                }
+                            });
+                        }
+
+                        if (sizeSelect.value) {
+                            sizeSelect.querySelector(`option[value="${sizeSelect.value}"]`).classList.add('font-weight-bold', 'bg-light');
+                            colorSelect.querySelectorAll('option').forEach(option => {
+                                if (option.value && usedCombinations.has(`${option.value}-${sizeSelect.value}`)) {
+                                    option.disabled = true;
+                                    option.classList.add('text-muted');
+                                }
+                            });
+                        }
+                    });
+                }
+
+
+                // Hàm thêm sự kiện lắng nghe cho các select màu và kích thước
+                function addVariantListeners(row) {
+                    const colorSelect = row.querySelector('select[name$="[color]"]');
+                    const sizeSelect = row.querySelector('select[name$="[size]"]');
+
+                    [colorSelect, sizeSelect].forEach(select => {
+                        select.addEventListener('change', updateVariantOptions);
+                    });
+                }
+
+                // Sự kiện khi thay đổi checkbox "Is Simple Product"
                 document.getElementById('is_simple').addEventListener('change', function() {
                     const isSimple = this.checked;
                     const variantsSection = document.getElementById('variants-section');
@@ -154,58 +272,93 @@
                     variantsSection.style.display = isSimple ? 'block' : 'block';
                     addVariantButton.disabled = isSimple;
 
-                    // Nếu sản phẩm đơn giản, chỉ giữ lại một dòng và vô hiệu hóa các nút Remove
+                    // Xử lý khi sản phẩm là đơn giản
                     if (isSimple) {
                         while (variantsBody.rows.length > 1) {
                             variantsBody.deleteRow(-1);
                         }
                         document.querySelectorAll('#variants-body .remove-variant').forEach(button => button.style.display = 'none');
                     } else {
-                        // Hiển thị lại các nút Remove khi sản phẩm không đơn giản
                         document.querySelectorAll('#variants-body .remove-variant').forEach(button => button.style.display = 'inline-block');
                     }
+                    
+                    updateVariantOptions();
                 });
+
+                const colors = <?php echo json_encode($colors); ?>;
+                const sizes = <?php echo json_encode($sizes); ?>;
+
+                function escapeHtml(unsafe) {
+                    return unsafe
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+                }
 
                 document.getElementById('add-variant').addEventListener('click', function() {
                     let variantCount = document.querySelectorAll('#variants-body tr').length;
-                    let newRow = `<tr>
-                                    <td>
-                                        <select name="variant[${variantCount}][color]" class="form-control">
-                                            <option value="">--Select--</option>
-                                            <?php foreach ($colors as $color) : ?>
-                                                <option value="<?= $color['id'] ?>"><?= htmlspecialchars($color['color_name']) ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select name="variant[${variantCount}][size]" class="form-control">
-                                            <option value="">--Select--</option>
-                                            <?php foreach ($sizes as $size) : ?>
-                                                <option value="<?= $size['id'] ?>"><?= htmlspecialchars($size['size_name']) ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="variant[${variantCount}][stock]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="variant[${variantCount}][price]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="file" name="variant[${variantCount}][images][]" class="form-control" multiple accept="image/*">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm remove-variant">Remove</button>
-                                    </td>
-                                </tr>`;
+                    
+                    let newRow = `
+                        <tr>
+                            <td>
+                                <select name="variant[${variantCount}][color]" class="form-control">
+                                    <option value="">--Select--</option>
+                                    ${colors.map(color => `<option value="${color.id}">${escapeHtml(color.color_name)}</option>`).join('')}
+                                </select>
+                                <span id="variant-${variantCount}-color-error" class="error-message text-danger"></span>
+                            </td>
+                            <td>
+                                <select name="variant[${variantCount}][size]" class="form-control">
+                                    <option value="">--Select--</option>
+                                    ${sizes.map(size => `<option value="${size.id}">${escapeHtml(size.size_name)}</option>`).join('')}
+                                </select>
+                                <span id="variant-${variantCount}-size-error" class="error-message text-danger"></span>
+                            </td>
+                            <td>
+                                <input type="text" name="variant[${variantCount}][stock]" class="form-control">
+                                <span id="variant-${variantCount}-stock-error" class="error-message text-danger"></span>
+                            </td>
+                            <td>
+                                <input type="text" name="variant[${variantCount}][price]" class="form-control">
+                                <span id="variant-${variantCount}-price-error" class="error-message text-danger"></span>
+                            </td>
+                            <td>
+                                <input type="file" name="variant[${variantCount}][images][]" class="form-control" multiple accept="image/*">
+                                <span id="variant-${variantCount}-images-error" class="error-message text-danger"></span>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm remove-variant">Remove</button>
+                            </td>
+                        </tr>`;
                     document.getElementById('variants-body').insertAdjacentHTML('beforeend', newRow);
+                    
+                    let lastRow = document.getElementById('variants-body').lastElementChild;
+                    addVariantListeners(lastRow);
+                    if (typeof window.attachEventListeners === 'function') {
+                    window.attachEventListeners(lastRow);
+}
+                    updateVariantOptions();
                 });
 
+                
+                // Sự kiện khi nhấn nút "Remove" variant
                 document.getElementById('variants-body').addEventListener('click', function(e) {
                     if (e.target.classList.contains('remove-variant')) {
                         e.target.closest('tr').remove();
+                        updateVariantOptions();
                     }
                 });
+
+                // Thêm sự kiện lắng nghe cho các hàng variant hiện có
+                document.querySelectorAll('#variants-body tr').forEach(row => {
+                    addVariantListeners(row);
+                });
+
+                // Cập nhật các tùy chọn ban đầu
+                updateVariantOptions();
+
             </script>
 
         </div>
