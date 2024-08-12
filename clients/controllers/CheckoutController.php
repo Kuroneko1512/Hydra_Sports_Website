@@ -21,7 +21,7 @@ class CheckoutController extends BaseController
 
         $errors = [];
 
-        if (isset($_POST['email'])) { // validate
+        if (isset($_POST['email'])) { // validate trang checkout
 
             if (empty($_POST['firstName'])) {
                 $errors['firstName'] = 'First name required.';
@@ -56,10 +56,10 @@ class CheckoutController extends BaseController
                 $dataOrder['shipping_address'] = $_POST['shipping_address'];
                 $dataOrder['payment_status'] = $_POST['payment'];
                 $dataOrder['order_date'] = date('Y-m-d H:i:s');
-                $dataOrder['order_status_id'] = Order::$ORDER_STATUS_ORDERED;
+                $dataOrder['order_status_id'] = Order::$ORDER_STATUS_ORDERED;  // cách để lấy biến State (biến tĩnh)
                 $orderID = $orderModel->updateIdTable($dataOrder, $order['id']);
 
-                $_SESSION['order_id'] = $order['id'];
+                $_SESSION['order_id'] = $order['id']; // hiển thị ra order trang thành công // thêm một cái param id ở URL =>get 
                 $this->route->redirectClient('success');
             }
         }

@@ -14,6 +14,7 @@ class SignupController extends BaseController
             $password = $_POST['password'];
             $confirm_password = $_POST['confirm_password'];
         
+            //Validate from đăng ký user
             $errors=[];
             if(empty($_POST['username'])){
                 $errors['username'] = "Username required";

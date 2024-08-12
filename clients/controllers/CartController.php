@@ -50,8 +50,8 @@
             if(isset($orderID)){
                 $orderDetails = $orderDetailModel->all_item($orderID);
                 foreach ($orderDetails as $key => $value) {
-                    $orderDetails[$key]['product_name'] = $productVariantModel->getProductName($value['product_variant_id']);
-                    $orderDetails[$key]['product_image'] = $productImageModel->getImageByVariantID($value['product_variant_id']);
+                    $orderDetails[$key]['product_name'] = $productVariantModel->getProductName($value['product_variant_id']); // lấy được têm sản phẩm
+                    $orderDetails[$key]['product_image'] = $productImageModel->getImageByVariantID($value['product_variant_id']); // lấy được ảnh hiển thị trong giỏ  hàng
     
                     $totalPrice += (int)$value['price'] * (int)$value['quantity'];
                 }
@@ -63,6 +63,7 @@
             $this->viewApp->requestView('cart.cart', $data);
         }
 
+        
         public function cartUpdate() 
         {
             $id = $_POST['id'];

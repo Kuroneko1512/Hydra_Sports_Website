@@ -20,7 +20,7 @@ class ProductVariant extends BaseModel
     public function getProductName($variant_id) {
         try {
             global $coreApp;
-            $sql = "SELECT p.product_name FROM {$this->tableName} pv
+            $sql = "SELECT p.product_name FROM {$this->tableName} pv  
             INNER JOIN product p ON p.id = pv.product_id
             where pv.id = $variant_id";
             $stmt = $this->conn->prepare($sql);
