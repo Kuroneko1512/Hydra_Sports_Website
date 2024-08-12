@@ -73,7 +73,7 @@
                                                 <td><?= $order['order_date'] ?></td>
                                                 <td><?= $order['order_status'] ?></td>
                                                 <td>
-                                                    <a href="<?= $route->getLocateAdmin('product_edit') ?>&id=<?= $order['id'] ?>">
+                                                    <a href="<?= $route->getLocateAdmin('edit-order') ?>&id=<?= $order['id'] ?>">
                                                         <button type="button" class="btn btn-cyan btn-sm">Edit</button>
                                                     </a>
                                                     <a href="<?= $route->getLocateAdmin('') ?>&id=<?= $order['id'] ?>" onclick="return confirm ('Bạn có muốn xóa không')" >

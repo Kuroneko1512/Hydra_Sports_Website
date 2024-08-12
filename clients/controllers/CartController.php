@@ -3,32 +3,36 @@
     {
         public function loadModels() {}
         public function cart() {
+
+            if (empty($_SESSION['user'])) {
+                $this->route->redirectClient('login');
+            }
+
             $orderModel= new Order();
             $orderDetailModel= new OrderDetail();
             $productVariantModel= new ProductVariant();
             $productImageModel= new ProductImage();
 
             $orderID = null;
-            if (isset($_SESSION['order_id'])) {
-                $orderID = $_SESSION['order_id'];
+            $order = $orderModel->getOrderInCart($_SESSION['user']['id']);
 
-                $order = $orderModel->findIdTable($orderID);
-                if (empty($order)) {
-                    unset($_SESSION['order_id']);
-                    $orderID = null;
-                }
+            if (isset($order['id'])) {
+                $orderID = $order['id'];
             }
-
+            
+            // Xử lý phần Add To Cart
             if (isset($_POST['variant_id'])) {
-                
                 $variant = $productVariantModel->findIdTable($_POST['variant_id']);
 
                 if ($orderID == null) {
                     $dataOrder = [];  
-                    // $dataOrder['order_status'] = 0;
                     $dataOrder['payment_status'] = 0;
-                    $orderID = $orderModel->insertTable($dataOrder);
-                    $_SESSION['order_id'] = $orderID;
+                    $dataOrder['order_status_id'] = Order::$ORDER_STATUS_IN_CART;
+                    if (isset($_SESSION['user'])) {
+                        $dataOrder['user_id'] = $_SESSION['user']['id'];
+                    }
+                    $orderID = $orderModel->insertTable($dataOrder);// Hàm này trả ra ID
+                    $_SESSION['order_id'] = $orderID; // order ID đang tồn tại trong database
                 }
 
                 $dataOrderDetail = [];  
@@ -37,28 +41,49 @@
                 $dataOrderDetail['quantity'] = $_POST['quantity'];
                 $dataOrderDetail['price'] = (int)$variant['price'];
                 $orderDetailModel->insertTable($dataOrderDetail);
+
+                $this->route->redirectClient('cart');
             }
 
-            $orders = $orderModel->allTable();
-            $order = $orders[0];
-
-            $orderDetails = $orderDetailModel->all_item($order['id']);
-
+            $orderDetails= [];
             $totalPrice = 0;
-
-            foreach ($orderDetails as $key => $value) {
-                $orderDetails[$key]['product_name'] = $productVariantModel->getProductName($value['product_variant_id']);
-                $orderDetails[$key]['product_image'] = $productImageModel->getImageByVariantID($value['product_variant_id']);
-
-                $totalPrice += (int)$value['price'] * (int)$value['quantity'];
+            if(isset($orderID)){
+                $orderDetails = $orderDetailModel->all_item($orderID);
+                foreach ($orderDetails as $key => $value) {
+                    $orderDetails[$key]['product_name'] = $productVariantModel->getProductName($value['product_variant_id']); // lấy được têm sản phẩm
+                    $orderDetails[$key]['product_image'] = $productImageModel->getImageByVariantID($value['product_variant_id']); // lấy được ảnh hiển thị trong giỏ  hàng
+    
+                    $totalPrice += (int)$value['price'] * (int)$value['quantity'];
+                }
             }
-
+           
             $data['orderDetails'] = $orderDetails;
             $data['totalPrice'] = $totalPrice;
 
             $this->viewApp->requestView('cart.cart', $data);
         }
 
+        
+        public function cartUpdate() 
+        {
+            $id = $_POST['id'];
+            $quantity = $_POST['quantity'];
+
+            $orderDetailModel= new OrderDetail();
+            $dataOrderDetail = [];  
+            $dataOrderDetail['quantity'] = $quantity;
+            $orderDetailModel->updateIdTable($dataOrderDetail, $id);
+
+            return true;
+        }
+
+        public function deleteItem() 
+        {
+            $id = $_POST['id'];
+            $orderDetailModel= new OrderDetail();
+            $orderDetailModel->removeIdTable($id);
+            return true;
+        }
         
     }
 ?>

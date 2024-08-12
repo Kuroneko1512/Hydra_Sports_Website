@@ -35,20 +35,20 @@
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
+                                        <button class="btn btn-sm btn-primary btn-minus in-cart" >
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="<?= $item['quantity'];?>">
+                                    <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center item-in-cart" value="<?= $item['quantity'];?>" data-id="<?= $item['id'];?>"  data-price="<?= $item['price'];?>">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
+                                        <button class="btn btn-sm btn-primary btn-plus in-cart">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle">$<?= $item['price'] * $item['quantity'];?></td>
-                            <td class="align-middle"><button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></td>
+                            <td class="align-middle total-item-price">$<?= $item['price'] * $item['quantity'];?></td>
+                            <td class="align-middle"><button class="btn btn-sm btn-danger delete-item-in-cart"><i class="fa fa-times"></i></button></td>   <!-- button Xóa -->
                         </tr>
                         <?php }?>
                     </tbody>
@@ -69,7 +69,7 @@
                     <div class="border-bottom pb-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h6>Subtotal</h6>
-                            <h6>$<?=$totalPrice;?></h6>
+                            <h6 id="subtotal-in-cart">$<?=$totalPrice;?></h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
@@ -79,7 +79,7 @@
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
-                            <h5>$<?=$totalPrice;?></h5>
+                            <h5 id="total-price-in-cart">$<?=$totalPrice;?></h5>
                         </div>
                         <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
                     </div>

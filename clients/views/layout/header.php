@@ -46,10 +46,17 @@
                 <div class="d-inline-flex align-items-center">
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">Sign in</button>
-                            <button class="dropdown-item" type="button">Sign up</button>
-                        </div>
+                        <?php if(isset($_SESSION['user'])) { ?>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <button class="dropdown-item" type="button"> Hello <?= $_SESSION['user']['username'] ?></button>
+                                <button class="dropdown-item" type="button"><a href="<?= $route->getLocateClient('logout') ?>"> Logout</a></button>
+                            </div>
+                        <?php } else {?>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <button class="dropdown-item" type="button"> <a href="<?= $route->getLocateClient('login') ?>"> Sign in</a> </button>
+                                <button class="dropdown-item" type="button"><a href="<?= $route->getLocateClient('signup') ?>"> Sign up</a></button>
+                            </div>
+                        <?php }?>
                     </div>
                     <div class="btn-group mx-2">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
@@ -73,7 +80,7 @@
                         <i class="fas fa-heart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                     </a>
-                    <a href="" class="btn px-0 ml-2">
+                    <a href="<?= $route->getLocateClient('cart') ?>" class="btn px-0 ml-2">
                         <i class="fas fa-shopping-cart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                     </a>
@@ -82,7 +89,7 @@
         </div>
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
-                <a href="" class="text-decoration-none">
+                <a href="<?= BASE_URL ?>" class="text-decoration-none">
                     <span class="h1 text-uppercase text-primary bg-dark px-2">Hydra</span>
                     <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Sports</span>
                 </a>
@@ -108,6 +115,10 @@
     <!-- Topbar End -->
 
 
-    <?php $viewApp->requestComponents('navbar'); ?>
+    <?php $viewApp->requestComponents('navbar'); ?> 
+      <!--   $this->viewApp->requestView('cart.cart', $data); thông thường gọi đến phương thức requestView hiển thị view 
+        Header gọi đến phương thức requestComponets => thay đổi trong view và controller của commons
+      -->
+
 
    

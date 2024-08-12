@@ -13,7 +13,7 @@ class CategoryController extends BaseController
         $cat = isset($_GET['cat']) ? $_GET['cat'] : '';
         $limit = 8;
 
-        $countProduct = $productModel->countProducts(null);
+        $countProduct = $productModel->countProducts($cat); //?
         $data['num_of_products'] = $countProduct;
         $products = $productModel->getProducts($cat, $limit, ($page - 1) * $limit);
 

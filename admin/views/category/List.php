@@ -54,8 +54,8 @@
                                     </th>
                                     <th scope="col">ID</th>
                                     <th scope="col">Image</th>
-                                    <th scope="col">Category Name</th>                                    
-                                    <th scope="col">Description</th>                                    
+                                    <th scope="col">Category Name</th>   
+                                    <th scope="col">Description</th>           
                                     <th scope="col">Status</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -76,6 +76,7 @@
                                             </td>
                                             <td><?= $category['category_name'] ?></td>
                                             <td><?= $category['description'] ?></td>
+
                                             <td><?= ($category['status'] == 1) ? 'Active' : 'Inactive' ?></td>
                                             <td>
                                                 <a href="<?= $route->getLocateAdmin('edit-category', ['id' => $category['id']]) ?>">

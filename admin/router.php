@@ -58,6 +58,7 @@ match ($route->getAct()) {
 
     // Order
     'list-order' => (new OrderController())->list(),
+    'edit-order' => (new OrderController())->edit(),
     
     
 
