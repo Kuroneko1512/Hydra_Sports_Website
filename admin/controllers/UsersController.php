@@ -204,9 +204,13 @@
             }
 
             // Kiểm tra trường ảnh
-            if ((!$isEdit && empty($data->avatar)) || ($isEdit && !isset($data->avatar))) {
-                $errors['avatar'] = "Ảnh đại diện là bắt buộc";
-            }
+            // if ((!$isEdit && empty($data->avatar)) || ($isEdit && !isset($data->avatar))) {
+            //     $errors['avatar'] = "Ảnh đại diện là bắt buộc";
+            // }
+            // Kiểm tra trường ảnh chỉ khi tạo mới người dùng
+    if (!$isEdit && empty($data->avatar)) {
+        $errors['avatar'] = "Ảnh đại diện là bắt buộc";
+    }
 
             return $errors;
         }
